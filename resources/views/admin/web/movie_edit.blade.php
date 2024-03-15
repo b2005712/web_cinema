@@ -321,8 +321,8 @@
                                                                                @endforeach
                                                                            @endif
                                                                            name="movieGenres[]" value="{{ $genre->id }}"
-                                                                           id="movieGenres">
-                                                                    <label class="form-check-label" for="movieGenres">
+                                                                           id="movieGenres_{{ $genre->id }}">
+                                                                    <label class="form-check-label" for="movieGenres_{{ $genre->id }}">
                                                                         {{ $genre->name }}
                                                                     </label>
                                                                 </div>

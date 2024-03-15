@@ -25,7 +25,9 @@ use App\Http\Controllers\UserController;
 
 require 'admin.php';
 
+// Test
 Route::get('/admin', [MainController::class, 'admin']);
+
 
 Route::get('/', [MainController::class, 'home']);
 
@@ -49,6 +51,8 @@ Route::get('/logout', [AuthController::class, 'logout']);
 
 Route::get('/movies', [MainController::class, 'movies']);
 
+Route::get('/movies/filter', [MainController::class, 'movieFilter']);
+
 Route::get('/theater', [MainController::class, 'theater']);
 
 Route::get('/ticket/{schedule_id}', [MainController::class, 'ticket']);
@@ -62,7 +66,5 @@ Route::get('/paymentQR/{ticket_id}', [MainController::class, 'paymentQR']);
 Route::get('/paymentATM/{ticket_id}', [MainController::class, 'paymentATM']);
 
 Route::get('/search', [MainController::class, 'search']);
-
-Route::get('/movies/filter', [MainController::class, 'movieFilter']);
 
 Route::get('/profile',[MainController::class,'profile']);

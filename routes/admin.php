@@ -25,40 +25,6 @@ Route::prefix('admin')->group(function () {
 
     Route::get('/', [AdminController::class, 'home']);
     Route::get('/logout', [AdminController::class, 'home']);
-    //Revenue
-    // Route::get('/search_movie', [AdminController::class, 'search_movie']);
-    // Route::get('/search_theater', [AdminController::class, 'search_theater']);
-    // // statistical
-    // Route::get('/filter-by-date', [AdminController::class, 'filter_by_date']);
-    // Route::get('/statistical-filter', [AdminController::class, 'statistical_filter']);
-    // Route::get('/statistical-sortby', [AdminController::class, 'statistical_sortby']);
-
-    // // scan ticket
-    // Route::prefix('scanCombo')->group(function () {
-    //     Route::post('/handle', [StaffController::class, 'handleScanCombo']);
-    //     Route::get('/', [StaffController::class, 'scanCombo']);
-    // });
-
-    //TODO Buy ticket
-    // Route::prefix('buyTicket')->group(function () {
-    //     Route::post('/handleResult', [StaffController::class, 'handleResult']);
-    //     Route::post('/createPayment', [StaffController::class, 'createPayment']);
-    //     Route::post('/ticketPayment', [StaffController::class, 'ticketPayment']);
-    //     Route::post('/scanBC', [StaffController::class, 'scanBarcode']);
-    //     Route::get('/{schedule_id}', [StaffController::class, 'ticket']);
-    //     Route::get('/', [StaffController::class, 'buyTicket']);
-    // });
-
-    // Route::post('/ticketCombo/create', [StaffController::class, 'createTicketCombo']);
-    // Route::prefix('buyCombo')->group(function () {
-    //     Route::get('/', [StaffController::class, 'buyCombo']);
-    // });
-
-    // Route::post('/postprofile', [AdminController::class, 'Postprofile']);
-    // Route::get('/profile', [AdminController::class, 'profile']);
-
-    // Route::get('/feedback', [AdminController::class, 'feedback']);
-
     //TODO Movie Genres
     Route::prefix('movie_genres')->group(function () {
         Route::get('/', [MovieGenresController::class, 'movie_genres']);
@@ -159,13 +125,7 @@ Route::prefix('admin')->group(function () {
     });
 
     //TODO banners
-    Route::prefix('banners')->group(function () {
-        Route::get('/', [BannerController::class, 'banners']);
-        Route::post('/create', [BannerController::class, 'postCreate']);
-        Route::post('/edit/{id}', [BannerController::class, 'postEdit']);
-        Route::delete('/delete/{id}', [BannerController::class, 'delete']);
-        Route::get('/status', [BannerController::class, 'status']);
-    });
+
 
     //TODO Cast
     Route::prefix('cast')->group(function () {
@@ -183,15 +143,6 @@ Route::prefix('admin')->group(function () {
         Route::get('/status', [ComboController::class, 'status']);
         Route::delete('/delete/{id}', [ComboController::class, 'delete']);
     });
-
-    //TODO News
-    // Route::prefix('news')->group(function () {
-    //     Route::get('/', [NewsController::class, 'news']);
-    //     Route::post('/create', [NewsController::class, 'postCreate']);
-    //     Route::post('/edit/{id}', [NewsController::class, 'postEdit']);
-    //     Route::delete('/delete/{id}', [NewsController::class, 'delete']);
-    //     Route::get('/status', [NewsController::class, 'status']);
-    // });
 
     //TODO Prices
     Route::prefix('prices')->group(function () {

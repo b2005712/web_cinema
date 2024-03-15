@@ -126,11 +126,11 @@ $generatorPNG = new Picqer\Barcode\BarcodeGeneratorPNG();
                                             {!! $value['schedule']['room']['name'] !!}
                                             (
                                             @foreach($value['ticketSeats'] as $seat)
-                                            @if ($loop->first)
-                                            {{ $seat->row.$seat->col }}
-                                            @else
-                                            ,{{ $seat->row.$seat->col }}
-                                            @endif
+                                                @if ($loop->first)
+                                                    {{ $seat->row.$seat->col }}
+                                                @else
+                                                    ,{{ $seat->row.$seat->col }}
+                                                @endif
                                             @endforeach
                                             )
                                         </p>

@@ -30,13 +30,13 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="showTime">@lang('lang.name')</label>
+                                    <label for="showTime">Tên</label>
                                     <input id="showTime" class="form-control" value="{{$info['name']}}" name="name" type="text">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="showTime">@lang('lang.phone')</label>
+                                    <label for="showTime">Số điện thoại</label>
                                     <input id="showTime" class="form-control" value="{{$info['phone']}}" name="phone" type="number">
                                 </div>
                             </div>
@@ -72,7 +72,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="showTime">@lang('lang.worktime')</label>
+                                    <label for="showTime">Thời gian làm việc</label>
                                     <input id="showTime" class="form-control" value="{{$info['worktime']}}" name="worktime" type="text">
                                 </div>
                             </div>

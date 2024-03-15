@@ -120,7 +120,6 @@
                         <div class="row m-2 mb-5 justify-content-end">
                 <a href="/news" class="btn btn-outline-warning w-auto">Xem Thêm &gt;</a>
             </div>
-                        <div class="zalo-chat-widget" data-oaid="4011839899851309095" data-welcome-message="Rất vui khi được hỗ trợ bạn, vui lòng để lại lời nhắn HMCinema sẽ trả lời bạn trong giây lát !" data-autopopup="0" data-width="" data-height="" style="z-index: 2147483644; border: none; visibility: visible; bottom: 52px; right: 52px; position: fixed; width: 60px; height: 60px; top: auto;"><iframe frameborder="0" allowfullscreen="" scrolling="no" width="60" height="60" src="https://page.widget.zalo.me/?position=null&amp;oaid=4011839899851309095&amp;welcomemessage=R%E1%BA%A5t%20vui%20khi%20%C4%91%C6%B0%E1%BB%A3c%20h%E1%BB%97%20tr%E1%BB%A3%20b%E1%BA%A1n%2C%20vui%20l%C3%B2ng%20%C4%91%E1%BB%83%20l%E1%BA%A1i%20l%E1%BB%9Di%20nh%E1%BA%AFn%20HMCinema%20s%E1%BA%BD%20tr%E1%BA%A3%20l%E1%BB%9Di%20b%E1%BA%A1n%20trong%20gi%C3%A2y%20l%C3%A1t%20!&amp;autopopup=0&amp;leftside=false&amp;width=440&amp;height=813&amp;style=2&amp;id=d038a93f-8801-407b-a6ad-0215ef1814c5&amp;domain=127.0.0.1&amp;android=false&amp;ios=false" style="max-height: 90vh; position: absolute; bottom: 0px; right: 0px;"></iframe></div>
         </div>
     </div>
 </section>
