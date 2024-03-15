@@ -237,6 +237,8 @@ class MainController extends Controller
         ]);
     }
 
+    // Thanh toán momo
+
     public function paymentQR($ticket_id){
         $ticket = Ticket::find($ticket_id);
         function execPostRequest($url, $data)

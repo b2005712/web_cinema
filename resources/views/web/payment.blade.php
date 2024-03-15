@@ -11,8 +11,8 @@
                         <label for="bankCode1"
                                class="fw-semibold btn btn-light btn-outline-primary h3 p-3 my-2 w-100 text-start text-dark">
                             Thanh toán bằng ứng dụng hỗ trợ
-                            <span class="vnpay-logo">
-                                <span class="vnpay-red">VN</span><span class="vnpay-blue">PAY</span><sup class="vnpay-red">QR</sup>
+                            <span class="Momo">
+                                Ví Momo
                             </span>
                         </label>
 
