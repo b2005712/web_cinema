@@ -15,13 +15,13 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0">
-                    <h6>@lang('lang.theater')</h6>
+                    <h6>Rạp chiếu</h6>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
                         <a style="float:right;padding-right:30px;" class="text-light">
                             <button class=" btn bg-gradient-info float-right mb-3" data-bs-toggle="modal" data-bs-target="#theaterCreateModal">
-                                @lang('lang.create')
+                               Tạo
                             </button>
                         </a>
 
@@ -29,16 +29,16 @@
                             <thead>
                             <tr>
                                 <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7">
-                                    @lang('lang.name')
+                                    Rạp
                                 </th>
                                 <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7">
-                                    @lang('lang.address')
+                                    Địa chỉ
                                 </th>
                                 <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7">
-                                    @lang('lang.room')
+                                    Phòng
                                 </th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                    @lang('lang.status')
+                                    Trạng thái
                                 </th>
                                 <th></th>
                                 <th></th>

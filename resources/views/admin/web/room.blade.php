@@ -2,13 +2,13 @@
     <thead>
     <tr>
         <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7">
-            @lang('lang.name')
+            Phòng
         </th>
         <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7">
-            @lang('lang.room_type')
+            Loại phòng
         </th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-            @lang('lang.status')
+            Trạng thái
         </th>
         <th></th>
         <th></th>

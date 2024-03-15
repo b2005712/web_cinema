@@ -16,11 +16,6 @@ use Illuminate\Support\Str;
 class AuthController extends Controller
 {
 
-    // public function __construct(){
-    //     $info = Info::find(1);
-    //     view()->share('info', $info);
-    // }
-
     public function signIn(Request $request)
     {
         $request->validate(
@@ -37,7 +32,7 @@ class AuthController extends Controller
         $phone = Auth::attempt(['phone' => $request['username'], 'password' => $request['password']]);
 
         if ($email || $phone) {
-            if(Auth::user()->checkRole('admin'))
+            if(Auth::user()->role =='admin')
             {
                 return redirect('/admin')->with('success','Đăng nhập tài khoản admin thành công');
             }
@@ -61,7 +56,6 @@ class AuthController extends Controller
             'email' => 'required|max:255|unique:users',
             'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|max:12|unique:users',
             'gender' => 'required',
-            'brith' => 'required',
             'agreement' => 'required',
             'password' => 'required|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/',
             'repassword' => 'required|same:password',
@@ -77,24 +71,30 @@ class AuthController extends Controller
             'repassword.required' => 'Vui lòng nhập lại mật khẩu',
             'repassword.same' => "Mật khẩu nhập lại không trùng khớp",
             'gender.required' => "Vui lòng chọn giới tính",
-            'birth.required' => "Vui lòng chọn ngày sinh",
             'agreement.required' => "Vui lòng đồng ý với điều khoản",
         ]);
         $user = new User([
             'fullname'=>$request['fullname'],
             'password'=>bcrypt($request['password']),
             'email'=>$request['email'],
+            'Brith'=>$request['brith'],
             'gender'=>$request['gender'],
             'phone'=>$request['phone'],
             'code'=>rand(1000000000000000, 9999999999999999),
-            'role' => 'user',
+            'role' => 'user'
         ]);
         $user->save();
-        if($errors){
-            redirect('/')->with('fail', 'Đăng ký không thành công');
+        if($user){
+            return redirect('/login')->with('success', 'Đăng ký thành công');
         }
         else{
-            redirect('/login')->with('success', 'Đăng ký thành công');
+            return redirect('/')->with('fail', 'Đăng ký không thành công');
         }
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/')->with('success','Đăng xuất thành công');
     }
 }

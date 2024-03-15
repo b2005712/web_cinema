@@ -13,19 +13,19 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="name">@lang('lang.name')</label>
+                                <label for="name">Rạp</label>
                                 <input class="form-control" id="name" type="text" value="{{ $theater->name }}" name="name">
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="address">@lang('lang.address')</label>
+                                <label for="address">Địa chỉ</label>
                                 <input class="form-control" id="address" type="text" value="{{ $theater->address }}" name="address">
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="city_theater_{{ $theater->id }}">@lang('lang.city')</label>
+                                <label for="city_theater_{{ $theater->id }}">Thành phố</label>
                                 <select id="city_theater_{{ $theater->id }}" class="form-select" name="city">
                                     <option value="An Giang">An Giang</option>
                                     <option value="Bắc Giang">Bắc Giang</option>
@@ -96,7 +96,7 @@
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="location">@lang('lang.location')</label>
+                                <label for="location">Định vị</label>
                                 <input class="form-control" id="location" type="text" value="{{ $theater->location }}" name="location">
                             </div>
                         </div>
@@ -105,9 +105,9 @@
                 @include('admin.web.room')
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">@lang('lang.close')</button>
+                <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Đóng</button>
                 <button type="button" class="btn bg-gradient-info" onclick="btnEdit({{$theater->id}})">
-                    @lang('lang.save')
+                    Lưu
                 </button>
             </div>
         </div>

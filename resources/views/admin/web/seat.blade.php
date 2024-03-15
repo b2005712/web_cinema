@@ -13,14 +13,14 @@
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="name">Email address</label>
+                                    <label for="name">Tên phòng</label>
                                     <input id="name" type="text" name="name" class="form-control"
                                            placeholder="Name..." value="{{$room->name}}">
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="type">Room type</label>
+                                    <label for="type">Loại phòng</label>
                                     <select class="form-control" name="type" id="type">
                                         @foreach($roomTypes as $type)
                                             <option value="{{$type->id}}"
@@ -32,7 +32,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary float-end">save</button>
+                        <button type="submit" class="btn btn-primary float-end">Lưu</button>
                     </form>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="d-block overflow-x-auto text-center">
                         <div class="w-100 mt-2 my-auto mb-4 text-center justify-content-center">
-                            @lang('lang.screen')
+                            MÀN HÌNH
                             <div class="row bg-dark w-100 mx-auto" style="height: 2px; max-width: 540px"></div>
 
                             <div class="row d-block m-2" style="margin: 2px">
@@ -74,7 +74,59 @@
                                                  data-bs-toggle="offcanvas" data-bs-target="#EditSeat_{{ $seat->id }}">
                                                 {{ $seat->row.$seat->col }}
                                             </div>
-                                            @include('admin.web.configSeat')
+                                            
+                                            <div class="offcanvas offcanvas-start" tabindex="-1" id="EditSeat_{{ $seat->id }}"
+                                                aria-labelledby="EditSeatRowLabel">
+                                               <div class="offcanvas-header">
+                                                   <h5 class="offcanvas-title" id="EditSeatRowLabel">EDIT {{ $seat->row.$seat->col }}</h5>
+                                                   <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                                           aria-label="Close"></button>
+                                               </div>
+                                               <div class="offcanvas-body">
+                                                   <form action="admin/seat/edit" method="post">
+                                                       @csrf
+                                                       @foreach($seatTypes as $seatType)
+                                                           <div class="form-check">
+                                                               <input class="form-check-input seat_type_radio" type="radio" name="seatType"
+                                                                      id="ColorRadio_{{ $seatType->id }}_{{ $seat->id }}" value="{{ $seatType->id }}"
+                                                                      @if($seat->seatType_id==$seatType->id)
+                                                                          checked
+                                                                      @endif
+                                                               >
+                                                               <label class="form-check-label flex-fill d-flex border-0 ps-1 my-2"
+                                                                      for="ColorRadio_{{ $seatType->id }}_{{ $seat->id }}">
+                                                               <span class="fw-bold d-block text-center me-1"
+                                                                     style="width: 20px; height: 20px; background-color: {{ $seatType->color }};"></span>
+                                                                   <span style="line-height: 20px">{{ $seatType->name }} - {{ $seatType->surcharge }}</span>
+                                           
+                                                               </label>
+                                           
+                                                           </div>
+                                                       @endforeach
+                                                       <label class="text-sm">
+                                                               @if($seat['status'] ==1)
+                                                                   <a href="admin/seat/on/{!! $seat['id'] !!},{!! $room['id'] !!}">
+                                                                       <span class="badge badge-sm bg-gradient-success">Online</span>
+                                                                   </a>
+                                                               @else
+                                                               <a href="admin/seat/off/{!! $seat['id'] !!},{!! $room['id'] !!}">
+                                                                           <span class="badge badge-sm bg-gradient-secondary">Offline</span>
+                                                                   </a>
+                                                               @endif
+                                                       </label>
+                                                       <input type="hidden" name="room" value="{{ $room->id }}">
+                                                       <input type="hidden" name="seat" value="{{ $seat->id }}">
+                                                       <a href="admin/seat/delete/{{$seat->id}}?room={{ $room->id }}" class="btn btn-primary mt-4">
+                                                           <i class="fa-solid fa-trash-can fa-lg"></i> Xóa
+                                                       </a>
+                                                       <button type="submit" class="btn btn-primary mt-4"
+                                                               data-bs-dismiss="offcanvas">
+                                                           Xác nhận
+                                                       </button>
+                                                   </form>
+                                               </div>
+                                           </div>
+                                                                                      
                                         @endif
                                         @if($loop->last)
                                             <div class="d-inline-block border cursor-pointer align-middle py-1 px-0"
@@ -82,7 +134,38 @@
                                                  data-bs-toggle="offcanvas" data-bs-target="#EditRow_{{ $room->id }}_{{ $row->row }}">
                                                 <i class="fa-solid fa-pen-to-square fa-lg"></i>
                                             </div>
-                                            @include('admin.web.configRow')
+                                            
+                                            <div class="offcanvas offcanvas-start" tabindex="-1" id="EditRow_{{ $room->id }}_{{ $row->row }}"
+                                                aria-labelledby="EditSeatRowLabel">
+                                               <div class="offcanvas-header">
+                                                   <h5 class="offcanvas-title" id="EditSeatRowLabel">EDIT Hàng</h5>
+                                                   <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                                           aria-label="Close"></button>
+                                               </div>
+                                               <div class="offcanvas-body">
+                                                   <form action="admin/seat/row" method="post">
+                                                       @csrf
+                                                       @foreach($seatTypes as $seatType)
+                                                           <div class="form-check">
+                                                               <input class="form-check-input seat_type_radio" type="radio" name="seatType"
+                                                                      id="ColorRadio_{{ $seatType->id }}_{{ $room->id }}_{{ $row->row }}" value="{{ $seatType->id }}">
+                                                               <label class="custom-control-label flex-fill d-flex border-0 ps-1 my-2"
+                                                                      for="ColorRadio_{{ $seatType->id }}_{{ $room->id }}_{{ $row->row }}">
+                                                               <span class="fw-bold d-block text-center me-1 seat_color_{{ $seatType->id }}"
+                                                                     style="width: 20px; height: 20px; background-color: {{ $seatType->color }};"></span>
+                                                                   <span style="line-height: 20px">{{ $seatType->name }} - {{ $seatType->surcharge }}</span>
+                                                               </label>
+                                                           </div>
+                                                       @endforeach
+                                                       <input type="hidden" name="room" value="{{ $room->id }}">
+                                                       <input type="hidden" name="row" value="{{ $row->row }}">
+                                                       <button type="submit" class="btn btn-primary" data-bs-dismiss="offcanvas">
+                                                           Xác nhận
+                                                       </button>
+                                                   </form>
+                                               </div>
+                                           </div>
+                                           
                                         @endif
                                     @endforeach
                                 </div>

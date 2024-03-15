@@ -35,21 +35,20 @@
                <form action="/movies/filter" method="get">
                    <div class="m-2 form-group mb-3">
                        <label class="form-label" for="movieGenres">Thể loại</label>
-                       <select id="movieGenres" class="form-select director-input" name="movieGenres[]" multiple>
-                            <option value="" >Tất cả</option>
-                            <option value="" >1</option>
-                            <option value="" >2</option>
-                            <option value="" >3</option>
+                       <select id="movieGenres" class="form-select" name="movieGenres[]" multiple>
+                            @foreach ($genres as $genre)
+                                <option value="{{$genre->id}}">{{ $genre->name }}</option>
+                            @endforeach
                        </select>
                    </div>
     
                    <div class="m-2 form-group mb-3">
-                       <label class="form-label" for="rating director-input">Giới hạng độ tuổi</label>
+                       <label class="form-label" for="rating ">Giới hạng độ tuổi</label>
                        <select id="rating" class="form-select" name="rating">
-                           <option value="" selected>Tất cả</option>
-                           <option value="" >Tất cả</option>
-                           <option value="" >Tất cả</option>
-    
+                            <option value="">Chọn</option>
+                            @foreach ($rating as $rating)
+                                <option value="{{$rating->id}}">{{ $rating->name }}</option>
+                            @endforeach
                        </select>
                    </div>
 
@@ -63,68 +62,55 @@
                 <div class="row d-flex justify-content-center">
                     <div class="product-list col-10">
                         <div class="row">
-                            <article class="col-md-3 col-sm-4 col-xs-6 thumb grid-item post-38424">
-                                <div class="item">
-                                   <a class="thumb" href="\movieDetails" title="GÓA PHỤ ĐEN">
-                                    <figure><img class="lazy img-responsive" src="image_products/The_Wolf_of_Wall_Street.png" alt="GÓA PHỤ ĐEN" title="GÓA PHỤ ĐEN"></figure>
-                                    <span class="status" style="background-color: cadetblue">18T</span>
-                                    <div class="product-info">
-                                        <h2 class="product-name">Sói già phố Wall</h2>
-                                        <div class="movie-info">
-                                            <span class="bold">Thể loại: </span>
-                                            <span class="normal">Gia đình, Hài, Tình cảm</span>
+                            @foreach ($movies as $movie)
+                                @if ($movie->releaseDate <= date('Y-m-d') && $movie->endDate >= date('Y-m-d'))
+                                <article class="col-md-3 col-sm-4 col-xs-6 thumb grid-item post-38424">
+                                    <div class="item">
+                                       <a class="thumb" href="/movie/{{ $movie->id }}" title="{!! $movie['name'] !!}">
+                                        <figure><img class="lazy img-responsive" src="/images/movies/{!! $movie['image'] !!}" alt="" title="{!! $movie['name'] !!}" style="height: 350px"></figure>
+                                        <span class="status
+                                        @if($movie->rating->name == 'C18') bg-danger
+                                        @elseif($movie->rating->name == 'C16') bg-warning
+                                        @elseif($movie->rating->name == 'P') bg-success
+                                        @elseif($movie->rating->name == 'K') bg-primary
+                                        @else bg-info
+                                        @endif me-1">{!! $movie->rating->name !!}</span>
+                                        <div class="product-info">
+                                            <h2 class="product-name">{!! $movie['name'] !!}</h2>
+                                            <div class="movie-info">
+                                                <span class="bold">Thể loại: </span>
+                                                <span class="normal">
+                                                    @foreach($movie->movieGenres as $genre)
+                                                        @if ($loop->first)
+                                                            {{$genre->name}}
+                                                        @else
+                                                            , {{ $genre->name }}
+                                                        @endif
+                                                    @endforeach
+                                                </span>
+                                            </div>
+                                            <div class="movie-info">
+                                                <span class="bold">Thời lượng: </span>
+                                                <span class="normal">{!!$movie['showTime']!!}</span>
+                                            </div>
+                                            <div class="movie-info">
+                                                <span class="bold">Khởi chiếu: </span>
+                                                <span class="normal">{!! $movie['releaseDate'] !!}</span>
+                                            </div>
                                         </div>
-                                        <div class="movie-info">
-                                            <span class="bold">Thời lượng: </span>
-                                            <span class="normal">120 phút</span>
-                                        </div>
-                                        <div class="movie-info">
-                                            <span class="bold">Khởi chiếu: </span>
-                                            <span class="normal">23-02-2024</span>
-                                        </div>
+                                        <ul>
+                                            <li class="like">
+                                                <button class="btn btn-like"><i class="fa fa-thumbs-up"></i> Like 12</button>
+                                            </li>
+                                            <li class="booking">
+                                                <button class="btn btn-booking"><i class="fa-solid fa-receipt"></i> Đặt vé</button>
+                                            </li>
+                                        </ul>
+                                       </a>
                                     </div>
-                                    <ul>
-                                        <li class="like">
-                                            <button class="btn btn-like"><i class="fa fa-thumbs-up"></i> Like 12</button>
-                                        </li>
-                                        <li class="booking">
-                                            <button class="btn btn-booking"><i class="fa-solid fa-receipt"></i> Đặt vé</button>
-                                        </li>
-                                    </ul>
-                                   </a>
-                                </div>
-                            </article>
-                            <article class="col-md-3 col-sm-4 col-xs-6 thumb grid-item post-38424">
-                                <div class="item">
-                                   <a class="thumb" href="chitiet.php" title="GÓA PHỤ ĐEN">
-                                    <figure><img class="lazy img-responsive" src="image_products/The_Wolf_of_Wall_Street.png" alt="GÓA PHỤ ĐEN" title="GÓA PHỤ ĐEN"></figure>
-                                    <span class="status" style="background-color: cadetblue">18T</span>
-                                    <div class="product-info">
-                                        <h2 class="product-name">Sói già phố Wall</h2>
-                                        <div class="movie-info">
-                                            <span class="bold">Thể loại: </span>
-                                            <span class="normal">Gia đình, Hài, Tình cảm</span>
-                                        </div>
-                                        <div class="movie-info">
-                                            <span class="bold">Thời lượng: </span>
-                                            <span class="normal">120 phút</span>
-                                        </div>
-                                        <div class="movie-info">
-                                            <span class="bold">Khởi chiếu: </span>
-                                            <span class="normal">23-02-2024</span>
-                                        </div>
-                                    </div>
-                                    <ul>
-                                        <li class="like">
-                                            <button class="btn btn-like"><i class="fa fa-thumbs-up"></i> Like 12</button>
-                                        </li>
-                                        <li class="booking">
-                                            <button class="btn btn-booking"><i class="fa-solid fa-receipt"></i> Đặt vé</button>
-                                        </li>
-                                    </ul>
-                                   </a>
-                                </div>
-                            </article>
+                                </article>
+                                @endif
+                            @endforeach
                         </div>
                     </div>
                     <div class="product-rating col-2">
@@ -136,9 +122,66 @@
         </div>
 
         <div id="phimsapchieu" class="row g-4 mt-2 row-cols-1 row-cols-md-2 collapse" data-bs-parent="#Movies">
-            <article class="card px-0 overflow-hidden" style="background: #f5f5f5">
-                2
-            </article>
+            <div class="product w-100">
+                <div class="row d-flex justify-content-center">
+                    <div class="product-list col-10">
+                        <div class="row">
+                            @foreach ($movies as $movie)
+                                @if ($movie->releaseDate > date('Y-m-d'))
+                                <article class="col-md-3 col-sm-4 col-xs-6 thumb grid-item post-38424">
+                                    <div class="item">
+                                       <a class="thumb" href="/movie/{{ $movie->id }}" title="{!! $movie['name'] !!}">
+                                        <figure><img class="lazy img-responsive" src="/images/movies/{!! $movie['image'] !!}" alt="" title="{!! $movie['name'] !!}" style="height: 350px"></figure>
+                                        <span class="status
+                                        @if($movie->rating->name == 'C18') bg-danger
+                                        @elseif($movie->rating->name == 'C16') bg-warning
+                                        @elseif($movie->rating->name == 'P') bg-success
+                                        @elseif($movie->rating->name == 'K') bg-primary
+                                        @else bg-info
+                                        @endif me-1">{!! $movie->rating->name !!}</span>
+                                        <div class="product-info">
+                                            <h2 class="product-name">{!! $movie['name'] !!}</h2>
+                                            <div class="movie-info">
+                                                <span class="bold">Thể loại: </span>
+                                                <span class="normal">
+                                                    @foreach($movie->movieGenres as $genre)
+                                                        @if ($loop->first)
+                                                            {{$genre->name}}
+                                                        @else
+                                                            , {{ $genre->name }}
+                                                        @endif
+                                                    @endforeach
+                                                </span>
+                                            </div>
+                                            <div class="movie-info">
+                                                <span class="bold">Thời lượng: </span>
+                                                <span class="normal">{!!$movie['showTime']!!}</span>
+                                            </div>
+                                            <div class="movie-info">
+                                                <span class="bold">Khởi chiếu: </span>
+                                                <span class="normal">{!! $movie['releaseDate'] !!}</span>
+                                            </div>
+                                        </div>
+                                        <ul>
+                                            <li class="like">
+                                                <button class="btn btn-like"><i class="fa fa-thumbs-up"></i> Like 12</button>
+                                            </li>
+                                            <li class="booking">
+                                                <button class="btn btn-booking"><i class="fa-solid fa-receipt"></i> Đặt vé</button>
+                                            </li>
+                                        </ul>
+                                       </a>
+                                    </div>
+                                </article>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="product-rating col-2">
+
+                    </div>
+                </div>
+            </div>
         </div>
         
     </div>
@@ -148,9 +191,6 @@
 @section('js')
     <script>
         $(document).ready(function () {
-            $('.director-input').select2({
-                tags: true
-            });
 
             $('#rating').select2({
                 tags: true

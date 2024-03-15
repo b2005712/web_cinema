@@ -112,7 +112,7 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0">
-                    <h6>@lang('lang.statistical')</h6>
+                    <h6>Doanh thu</h6>
                 </div>
                 <div class="card-body ms-8">
                     <div class="row">
@@ -178,37 +178,6 @@
                 <div class="table-responsive">
                     <table class="table align-items-center ">
                         <tbody>
-                            {{-- @foreach($movies->where('status', 1)->take(4) as $movie)
-                            <tr>
-                                <td class="w-30">
-                                    <div class="d-flex px-2 py-1 align-items-center">
-                                        <div class="ms-4">
-                                            <p class="text-xs font-weight-bold mb-0">@lang('lang.movies')</p>
-                                            <h6 class="text-sm mb-0">
-                                                {{$movie['name']}}
-                                            </h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="text-center">
-                                        <p class="text-xs font-weight-bold mb-0">@lang('lang.ticket_sold')</p>
-                                        <h6 class="text-sm mb-0">
-                                            {{$movie['ticketseats']}}
-                                        </h6>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="text-center">
-                                        <p class="text-xs font-weight-bold mb-0">@lang('lang.total_price')</p>
-                                        <h6 class="text-sm mb-0">
-                                            {{number_format($movie['totalPrice'],0,",",".")}} đ
-                                        </h6>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach --}}
-
                             <tr>
                                 <td class="w-30">
                                     <div class="d-flex px-2 py-1 align-items-center">
@@ -253,34 +222,6 @@
                 <div class="table-responsive">
                     <table class="table align-items-center ">
                         <tbody>
-                            {{-- @foreach($theaters->take(4) as $theater)
-                            <tr>
-                                <td class="w-30">
-                                    <div class="d-flex px-2 py-1 align-items-center">
-                                        <div class="ms-4">
-                                            <p class="text-xs font-weight-bold mb-0">@lang('lang.theater')</p>
-                                            <h6 class="text-sm mb-0">{!! $theater['name'] !!}</h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="text-center">
-                                        <p class="text-xs font-weight-bold mb-0">@lang('lang.ticket_sold')</p>
-                                        <h6 class="text-sm mb-0">
-                                            {{$theater['ticketseats']}}
-                                        </h6>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="text-center">
-                                        <p class="text-xs font-weight-bold mb-0">@lang('lang.total_price')</p>
-                                        <h6 class="text-sm mb-0">
-                                            {{number_format($theater['totalPrice'],0,",",".")}} đ
-                                        </h6>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach --}}
                             <tr>
                                 <td class="w-30">
                                     <div class="d-flex px-2 py-1 align-items-center">
@@ -332,36 +273,6 @@
                             <div class="table-responsive">
                                 <table class="table align-items-center ">
                                     <tbody id="tbody_movie">
-                                        {{-- @foreach($movies as $movie)
-                                        <tr>
-                                            <td class="w-30">
-                                                <div class="d-flex px-2 py-1 align-items-center">
-                                                    <div class="ms-4">
-                                                        <p class="text-xs font-weight-bold mb-0">@lang('lang.movies')</p>
-                                                        <h6 class="text-sm mb-0">
-                                                            {{$movie['name']}}
-                                                        </h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="text-center">
-                                                    <p class="text-xs font-weight-bold mb-0">@lang('lang.ticket_sold')</p>
-                                                    <h6 class="text-sm mb-0">
-                                                        {{$movie['ticketseats']}}
-                                                    </h6>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="text-center">
-                                                    <p class="text-xs font-weight-bold mb-0">@lang('lang.total_price')</p>
-                                                    <h6 class="text-sm mb-0">
-                                                        {{number_format($movie['totalPrice'],0,",",".")}} đ
-                                                    </h6>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        @endforeach --}}
                                         <td class="w-30">
                                             <div class="d-flex px-2 py-1 align-items-center">
                                                 <div class="ms-4">
@@ -417,34 +328,6 @@
                             <div class="table-responsive">
                                 <table class="table align-items-center ">
                                     <tbody id="tbody_theater">
-                                        {{-- @foreach($theaters as $theater)
-                                        <tr>
-                                            <td class="w-30">
-                                                <div class="d-flex px-2 py-1 align-items-center">
-                                                    <div class="ms-4">
-                                                        <p class="text-xs font-weight-bold mb-0">@lang('lang.theater')</p>
-                                                        <h6 class="text-sm mb-0">{!! $theater['name'] !!}</h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="text-center">
-                                                    <p class="text-xs font-weight-bold mb-0">@lang('lang.ticket_sold')</p>
-                                                    <h6 class="text-sm mb-0">
-                                                        {{$theater['ticketseats']}}
-                                                    </h6>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="text-center">
-                                                    <p class="text-xs font-weight-bold mb-0">@lang('lang.total_price')</p>
-                                                    <h6 class="text-sm mb-0">
-                                                        {{number_format($theater['totalPrice'],0,",",".")}} đ
-                                                    </h6>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        @endforeach --}}
 
                                         <tr>
                                             <td class="w-30">
@@ -465,7 +348,7 @@
                                             </td>
                                             <td>
                                                 <div class="text-center">
-                                                    <p class="text-xs font-weight-bold mb-0">@lang('lang.total_price')</p>
+                                                    <p class="text-xs font-weight-bold mb-0">Tổng tiền</p>
                                                     <h6 class="text-sm mb-0">
                                                         222222 đ
                                                     </h6>

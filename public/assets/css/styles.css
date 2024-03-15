@@ -1259,24 +1259,86 @@ body {
   align-items: center;
 }
 
-.btn.disabled, .btn:disabled, fieldset:disabled .btn {
-  color: #fff;
-  background-color: #1e1e1e;
-  border-color: var(--bs-btn-active-border-color);
-  opacity:unset;
+.btn-pink{
+  background-color: #e43c6f !important;
+  color: #fff !important;
 }
 
-.btn-theater{
-  background-color: #1e1e1e;
-  color: #fff;
+/* this card is inspired form this - https://georgefrancis.dev/ */
+
+.card_theater {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 0.75rem;
+  background-color: white;
+  width: 300px;
+  height: 370px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,.1),
+  0 2px 4px -2px rgba(0,0,0,.1);
 }
 
-#Detail .nav-link{
-  color: #e75e8d !important;
-  border-color:#e75e8d !important;
+.card_theater .header {
+  position: relative;
+  background-clip: border-box;
+  margin-top: 1.5rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  border-radius: 0.75rem;
+  background-color: rgb(33 150 243);
+  box-shadow: 0 10px 15px -3px rgba(33,150,243,.4),0 4px 6px -4px rgba(33,150,243,.4);
+  height: 14rem;
 }
 
-#Detail .nav-link:hover{
-  color: #e75e8d !important;
-  border-color:#e75e8d !important;
+.card_theater .info {
+  border: none;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.card_theater .title {
+  color: rgb(38 50 56);
+  letter-spacing: 0;
+  line-height: 1.375;
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.card_theater .footer {
+  padding: 0.75rem;
+  border: 1px solid rgb(236 239 241);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(0, 140, 255, 0.082);
+}
+
+.card_theater .tag {
+  font-weight: 300;
+  font-size: .75rem;
+  display: block;
+}
+
+.card_theater .action {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  border: none;
+  outline: none;
+  box-shadow: 0 4px 6px -1px rgba(33,150,243,.4),0 2px 4px -2px rgba(33,150,243,.4);
+  color: rgb(255 255 255);
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: .75rem;
+  padding: 0.75rem 1.5rem;
+  background-color: rgb(33 150 243);
+  border-radius: 0.5rem;
+}
+
+.paid {
+  position: fixed; /* Đặt vị trí cố định */
+  bottom: 10px; /* Đặt khoảng cách từ trên xuống (điều chỉnh theo ý muốn của bạn) */
+  left: 450px; /* Đặt khoảng cách từ phía bên phải (điều chỉnh theo ý muốn của bạn) */
+  z-index: 999; /* Đảm bảo phần tử này nằm trên các phần tử khác (nếu cần thiết) */
 }

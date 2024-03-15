@@ -8,30 +8,30 @@
                     @csrf
                     <div class="card-header pb-0">
                         <div class="d-flex align-items-center">
-                            <p class="mb-0">@lang('lang.movies')</p>
-                            <button type="submit" class="btn bg-gradient-primary btn-sm ms-auto">@lang('lang.submit')</button>
+                            <p class="mb-0">{!! $movie['name'] !!}</p>
+                            <button type="submit" class="btn bg-gradient-primary btn-sm ms-auto">Xác nhận</button>
                         </div>
                     </div>
                     <div class="card-body">
-                        <p class="text-uppercase text-sm">@lang('lang.edit')</p>
+                        <p class="text-uppercase text-sm">Cập nhật phim</p>
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="movieName" class="form-control-label">@lang('lang.movie_name')</label>
-                                    <input class="form-control" name="name" id="movieName" type="text" value="{!! $movie['name'] !!}" placeholder="@lang('lang.movie_name')">
+                                    <label for="movieName" class="form-control-label">Tên phim</label>
+                                    <input class="form-control" name="name" id="movieName" type="text" value="{!! $movie['name'] !!}" placeholder="nhập tên phim">
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label class="form-label" for="showTime">@lang('lang.showtime')</label>
+                                    <label class="form-label" for="showTime">Thời lượng</label>
                                     <input id="showTime" class="form-control" name="showTime" type="number" value="{!! $movie['showTime'] !!}">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="national" class="form-control-label">@lang('lang.national')</label>
+                                    <label for="national" class="form-control-label">Quốc gia</label>
                                     <select class="form-select" name="national" id="national">
-                                        <option value="">@lang('lang.national')</option>
+                                        <option value="">Quốc gia</option>
                                         <option value="Afghanistan">Afghanistan</option>
                                         <option value="Aland Islands">Quần đảo Aland</option>
                                         <option value="Albania">Albania</option>
@@ -289,10 +289,10 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="movieGenres" class="form-label">@lang('lang.movie_genre')</label>
+                                    <label for="movieGenres" class="form-label">Thể loại</label>
                                     <button type="button" class="form-control btn bg-gradient-danger float-right mb-3" data-bs-toggle="modal"
                                             data-bs-target="#movie_genre">
-                                        @lang('lang.select')
+                                        Chọn
                                     </button>
                                 </div>
                             </div>
@@ -309,7 +309,7 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
-                                                            <label for="example-text-input" class="form-control-label">@lang('lang.genre')</label>
+                                                            <label for="example-text-input" class="form-control-label">Thể loại</label>
                                                             @foreach($movieGenres as $genre)
                                                                 <div class="form-check form-check-info text-start">
                                                                     <input class="form-check-input" type="checkbox"
@@ -341,25 +341,25 @@
 
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="director" class="form-control-label">@lang('lang.directors')</label>
+                                    <label for="director" class="form-control-label">Đạo diễn</label>
                                     <input type="text" class="form-control director-input" name="director" value="{!! $movie['director'] !!}">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="releaseDate" class="form-control-label">@lang('lang.release_date')</label>
+                                    <label for="releaseDate" class="form-control-label">Ngày khởi chiếu</label>
                                     <input name="releaseDate"  id="releaseDate" class="form-control datepicker" value="{!! $movie['releaseDate'] !!}"  type="text">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="endDate" class="form-control-label">@lang('lang.end_date')</label>
+                                    <label for="endDate" class="form-control-label">Ngày kết thúc</label>
                                     <input id="endDate" name="endDate" class="form-control datepicker" value="{!! $movie['endDate'] !!}"  type="text">
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="rating" class="form-label">@lang('lang.rated')</label>
+                                    <label for="rating" class="form-label">Xếp hạng</label>
                                     <select id="rating" class="form-select" name="rating">
                                         @foreach($rating as $item)
                                             <option
@@ -375,16 +375,16 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="cast" class="form-label">@lang('lang.casts')</label>
+                                    <label for="cast" class="form-label">Diễn viên</label>
                                     <input type="text" id="cast" class="form-control cast-input" name="cast" value="{!! $movie['cast'] !!}">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group file-uploader">
-                                    <label for="movieImage" class="form-label">@lang('lang.image')</label>
+                                    <label for="movieImage" class="form-label">Hình ảnh</label>
                                     <input id="movieImage" type="file" name="Image" class="form-control image-movie">
                                     @if($movie['image'])
-                                        <img style="width: 300px" src="image_products/{!! $movie['image'] !!}"
+                                        <img style="height: 315px" src="/images/movies/{!! $movie['image'] !!}"
                                              class="img_movie" alt="user1">
                                     @endif
                                 </div>
@@ -400,7 +400,7 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="editor" class="form-label">@lang('lang.description')</label>
+                                    <label for="editor" class="form-label">Nội dung</label>
                                     <textarea class="form-control" name="description" id="editor"
                                               placeholder="description">{!! $movie['description'] !!}</textarea>
                                 </div>

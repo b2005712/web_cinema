@@ -3,6 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MovieController;
+use App\Http\Controllers\TheaterController;
+use App\Http\Controllers\ComboController;
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\RoomController;
+use App\Http\Controllers\SeatController;
+use App\Http\Controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -19,11 +27,11 @@ require 'admin.php';
 
 Route::get('/admin', [MainController::class, 'admin']);
 
-Route::get('/admin_movie', [MainController::class, 'admin_movie']);
-
 Route::get('/', [MainController::class, 'home']);
 
 Route::get('/home', [MainController::class, 'home']);
+
+Route::get('/movie/{id}', [MainController::class, 'movieDetails']);
 
 Route::get('/news', [MainController::class, 'news']);
 
@@ -31,32 +39,30 @@ Route::get('/contact', [MainController::class, 'contact']);
 
 Route::get('/login', [MainController::class, 'login']);
 
-Route::post('/signIn', [AuthController::class, 'signIn']);
-
 Route::get('/register', [MainController::class, 'register']);
+
+Route::post('/signIn', [AuthController::class, 'signIn']);
 
 Route::post('/signUp', [AuthController::class, 'signUp']);
 
-Route::get('/movies', [MainController::class, 'movies']);
+Route::get('/logout', [AuthController::class, 'logout']);
 
-Route::get('/movieDetails', [MainController::class, 'movieDetails']);
+Route::get('/movies', [MainController::class, 'movies']);
 
 Route::get('/theater', [MainController::class, 'theater']);
 
-Route::get('/ticket', [MainController::class, 'ticket']);
+Route::get('/ticket/{schedule_id}', [MainController::class, 'ticket']);
 
-// Route::post('/register_user', [MainController::class, 'registerUser'])->name('register_user');
+Route::post('/ticketCreate', [MainController::class, 'createTicket']);
 
-// Route::post('/login_user', [MainController::class, 'loginUser'])->name('login_user');
+Route::get('/ticketPaid/{ticket_id}', [MainController::class, 'ticketPaid']);
 
-Route::get('/home_page', [MainController::class, 'homePage']);
+Route::get('/paymentQR/{ticket_id}', [MainController::class, 'paymentQR']);
 
-Route::get('/logout', [MainController::class, 'logout']);
+Route::get('/paymentATM/{ticket_id}', [MainController::class, 'paymentATM']);
 
-Route::get('/contact_user', [MainController::class, 'contactUser']);
+Route::get('/search', [MainController::class, 'search']);
 
-Route::get('/product_details/{product_id}', [Product::class, 'detail']);
+Route::get('/movies/filter', [MainController::class, 'movieFilter']);
 
-Route::get('/product_home', [MainController::class, 'productHome']);
-
-Route::post('/search', [MainController::class, 'search']);
+Route::get('/profile',[MainController::class,'profile']);

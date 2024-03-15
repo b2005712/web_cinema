@@ -7,7 +7,6 @@ use App\Models\Director;
 use App\Models\Movie;
 use App\Models\MovieGenres;
 use App\Models\Rating;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\Request;
 
 class MovieController extends Controller
@@ -100,7 +99,6 @@ class MovieController extends Controller
     public function delete($id)
     {
         $movie = Movie::find($id);
-        Cloudinary::destroy($movie['image']);
         $movie->delete();
         return response()->json(['success' => 'Xóa thành công!']);
     }
@@ -133,7 +131,7 @@ class MovieController extends Controller
                     if(strstr($movie->image,"https") == "") {
                         $output .= '
                         <img style="width: 300px"
-                             src="https://res.cloudinary.com/'. cloud_name() .'/image/upload/'.$movie->image.'.jpg"
+                             src="/image/movie/'.$movie->image.'"
                              alt="user1">';
                     }
                     else {

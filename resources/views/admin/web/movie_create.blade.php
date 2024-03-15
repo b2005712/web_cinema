@@ -382,7 +382,7 @@
                                 <div class="form-group file-uploader">
                                     <label for="movieImage">Hình ảnh</label>
                                     <input id="movieImage" type="file" name="Image" class="form-control image-movie">
-                                    <img style="width: 300px" src="" class="img_movie d-none" alt="user1">
+                                    <img style="height: 315px" src="" class="img_movie d-none" alt="user1">
                                 </div>
                             </div>
                             <div class="col-md-6">

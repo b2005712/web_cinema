@@ -31,51 +31,20 @@
         <div class="now-showing">
             <h3 class="text-white mb-3">Phim đang chiếu</h3>
             <div class="owl-features owl-carousel">
-                <div class="item">
-                    <div class="thumb">
-                      <img src="image_products/The_Wolf_of_Wall_Street.png" alt="">
-                      <div class="hover-effect">
-                        <h6>Sói già phố wall</h6>
-                        <a href=""><button class="button btn-booking"><i class="fa-solid fa-receipt"></i> Xem chi tiết</button></a>
-                      </div>
-                    </div>
-                  </div>
-                <div class="item">
-                  <div class="thumb">
-                    <img src="image_products/The_Wolf_of_Wall_Street.png" alt="">
-                    <div class="hover-effect">
-                      <h6>Sói già phố wall</h6>
-                      <a href=""><button class="button btn-booking"><i class="fa-solid fa-receipt"></i> Xem chi tiết</button></a>
-                    </div>
-                  </div>
-                </div>
-                <div class="item">
-                    <div class="thumb">
-                      <img src="image_products/The_Wolf_of_Wall_Street.png" alt="">
-                      <div class="hover-effect">
-                        <h6>Sói già phố wall</h6>
-                        <a href=""><button class="button btn-booking"><i class="fa-solid fa-receipt"></i> Xem chi tiết</button></a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="item">
-                    <div class="thumb">
-                      <img src="image_products/The_Wolf_of_Wall_Street.png" alt="">
-                      <div class="hover-effect">
-                        <h6>Sói già phố wall</h6>
-                        <a href=""><button class="button btn-booking"><i class="fa-solid fa-receipt"></i> Xem chi tiết</button></a>
-                      </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="thumb">
-                        <img src="image_products/The_Wolf_of_Wall_Street.png" alt="">
-                        <div class="hover-effect">
-                            <h6>Sói già phố wall</h6>
-                            <a href=""><button class="button btn-booking"><i class="fa-solid fa-receipt"></i> Xem chi tiết</button></a>
-                        </div>
-                    </div>
-                </div>
+                @foreach ($movies as $movie)
+                    @if ($movie->releaseDate <= date('Y-m-d') && $movie->endDate >= date('Y-m-d'))
+                        <div class="item">
+                            <div class="thumb">
+                                <img src="/images/movies/{{$movie->image}}" alt="" style="height: 400px">
+                                <div class="hover-effect">
+                                    <h6>{!! $movie['name']!!}</h6>
+                                    <a href="/movie/{{ $movie->id }}"><button class="button btn-booking"><i class="fa-solid fa-receipt"></i> Xem chi tiết</button></a>
+                                </div>
+                            </div>
+                         </div>
+                    @endif
+                
+                @endforeach
             </div>
         </div>
 

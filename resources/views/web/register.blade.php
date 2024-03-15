@@ -31,7 +31,7 @@
                                 {{ session('fail') }}
                             </div>
                         @endif
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+                        @csrf
                         <div class="mb-3">
                             <label for="fullname" class="form-label fw-bold">Tên</label>
                             <input type="text" class="form-control" id="fullname" name="fullname">
@@ -97,7 +97,7 @@
                                 @endif
                             </div>
                              <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn fw-bold">Đăng nhập</button>
+                                <button type="submit" class="btn fw-bold">Đăng ký</button>
                             </div>
                         </div>
                     </form>

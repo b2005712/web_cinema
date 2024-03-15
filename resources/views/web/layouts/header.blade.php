@@ -1,37 +1,36 @@
 <header class="header-area header-sticky">
+    <title>{{$info['name']}}</title>
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <nav class="main-nav">
                     <a href="home" class="logo">
-                        <img src="assets/images/logo.png" alt="">
+                        <img src="/images/web/{{$info['logo']}}" alt="">
                     </a>
                     <div class="search-input">
-                        <form id="search" action="#">
-                          <input type="text" placeholder="Type Something" id='searchText' name="searchKeyword" onkeypress="handle" />
+                        <form id="search" action="/search"  method="get">
+                          <input type="text" placeholder="Type Something"  name="search" onkeypress="handle" />
                           <i class="fa fa-search"></i>
                         </form>
                     </div>
                     <ul class="nav">
-                        <li><a href="home" class="active">Trang chủ</a></li>
+                        <li><a href="/home" class="active">Trang chủ</a></li>
                         <li class="dropdown">
-                            <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Phim</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="\movies">Phim đang chiếu</a></li>
-                                <li><a class="dropdown-item" href="\movies">Phim sắp chiếu</a></li>
-                            </ul>
+                            <a href="/movies" role="button">Phim</a>
                         </li>
-                        <li><a href="\theater">Rạp chiếu</a></li>
-                        <li><a href="\news">Tin tức</a></li>
-                        <li><a href="\contact">Liên hệ\Dịch vụ</a></li>
+                        <li><a href="/theater">Rạp chiếu</a></li>
+                        <li><a href="/news">Tin tức</a></li>
+                        <li><a href="/contact">Liên hệ\Dịch vụ</a></li>
                         <li class="profile dropdown">
-                            <a href="login" class="profile-a">Đăng nhập</a>
-                            {{-- <a href="#" class="profile-a" role="button" data-bs-toggle="dropdown" aria-expanded="false">Tài khoản<img src="assets/images/profile-header.jpg" alt=""></a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Thông tin</a></li>
-                                <li><a class="dropdown-item" href="#">Vé của tôi</a></li>
-                                <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
-                            </ul> --}}
+                            @if (Auth::check())
+                                <a href="#" class="profile-a" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ Auth::user()->fullname }}</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/profile">Tài khoản</a></li>
+                                    <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                                </ul>
+                            @else
+                                <a href="/login" class="profile-a">Đăng nhập</a>
+                            @endif
                         </li>
                     </ul>   
                     <a class='menu-trigger'>

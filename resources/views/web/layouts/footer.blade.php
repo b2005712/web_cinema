@@ -4,7 +4,7 @@
         <div class="row">
           <div class="col-sm-4 col-xl-3">
             <a href="index.html" class="logo">
-                <img src="assets/images/logo.png" alt="">
+                <img src="/images/web/{{$info->logo}}" alt="">
             </a>
             <p>
                 cinema@gmail.com

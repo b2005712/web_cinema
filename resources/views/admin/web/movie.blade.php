@@ -7,9 +7,9 @@
                 <div class="card-header pb-0">
                     <h6>
                         Phim
-                        <label for="search">
+                        {{-- <label for="search">
                             <input type="text" placeholder="Nhập tên phim " class="form-controller" id="search" name="search" />
-                        </label>
+                        </label> --}}
                     </h6>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
@@ -29,7 +29,6 @@
                                     <th class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7">Kết thúc</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Trạng thái</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>
-                                    {{-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>--}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -41,11 +40,7 @@
                                         @endforeach
                                     </td>
                                     <td class="align-middle text-center">
-                                        @if(strstr($movie->image,"https") == "")
-                                        <img style="height: 200px" src="image_products/{{$movie->image}}" alt="user1">
-                                        @else
-                                        <img style="width: 300px" src="{{ $movie->image }}" alt="user1">
-                                        @endif
+                                        <img style="height: 200px" src="images/movies/{{$movie->image}}" alt="user1">
                                     </td>
                                     <td class="align-middle text-center">
                                         <div class="accordion-body mt-4 mb-3 w-100">
@@ -96,35 +91,6 @@
 </div>
 @endsection
 @section('scripts')
-<!-- {{--    <script>--}}
-{{--        $(document).ready(function () {--}}
-{{--            $.ajaxSetup({--}}
-{{--                headers: {--}}
-{{--                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')--}}
-{{--                }--}}
-{{--            });--}}
-{{--            $('.delete-movie').on('click', function () {--}}
-{{--                var userURL = $(this).data('url');--}}
-{{--                var trObj = $(this);--}}
-{{--                if (confirm("Are you sure you want to remove it?") === true) {--}}
-{{--                    $.ajax({--}}
-{{--                        url: userURL,--}}
-{{--                        type: 'DELETE',--}}
-{{--                        dataType: 'json',--}}
-{{--                        success: function (data) {--}}
-{{--                            if (data['success']) {--}}
-{{--                                // alert(data.success);--}}
-{{--                                trObj.parents("tr").remove();--}}
-{{--                            } else if (data['error']) {--}}
-{{--                                alert(data.error);--}}
-{{--                            }--}}
-{{--                        }--}}
-{{--                    });--}}
-{{--                }--}}
-
-{{--            });--}}
-{{--        });--}}
-{{--    </script>--}} -->
 <script>
     $(document).ready(function() {
         $.ajaxSetup({
