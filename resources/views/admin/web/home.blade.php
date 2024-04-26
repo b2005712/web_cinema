@@ -10,12 +10,10 @@
                             <div class="numbers">
                                 <p class="text-sm mb-0 text-uppercase font-weight-bold">Doanh thu trong ngày</p>
                                 <h5 class="font-weight-bolder">
-                                    {{-- {!! number_format($sum_today,0,",",".") !!} Vnđ --}}
-                                    800000 vnd
+                                    {!! number_format($sum_today,0,",",".") !!} Vnđ
                                 </h5>
                                 <p class="mb-0">
-                                    {{-- <span class="text-info text-sm font-weight-bolder">{!! date("d-m-Y",strtotime($now)) !!}</span> --}}
-                                    <span class="text-info text-sm font-weight-bolder">22/02/2024</span>
+                                    <span class="text-info text-sm font-weight-bolder">{!! date("d-m-Y",strtotime($now)) !!}</span>
                                 </p>
                             </div>
                         </div>
@@ -36,12 +34,10 @@
                             <div class="numbers">
                                 <p class="text-sm mb-0 text-uppercase font-weight-bold">Khách hàng</p>
                                 <h5 class="font-weight-bolder">
-                                    {{-- {!! count($user) !!} --}}
-                                    5
+                                    {!! count($user) !!}
                                 </h5>
                                 <p class="mb-0">
-                                     {{-- <span class="text-success text-sm font-weight-bolder">{!! date("d-m-Y",strtotime($now)) !!}</span> --}}
-                                     <span class="text-success text-sm font-weight-bolder">22/02/2024</span>
+                                     <span class="text-success text-sm font-weight-bolder">{!! date("d-m-Y",strtotime($now)) !!}</span>
                                 </p>
                             </div>
                         </div>
@@ -62,12 +58,10 @@
                             <div class="numbers">
                                 <p class="text-sm mb-0 text-uppercase font-weight-bold">Số vé bán ra</p>
                                 <h5 class="font-weight-bolder">
-                                    {{-- {!! $ticket_seat !!} --}}
-                                    100
+                                    {!! $ticket_seat !!}
                                 </h5>
-                                {{-- <span class="text-danger text-sm font-weight-bolder">{!! date("d-m-Y",strtotime($year)) !!}
-                                        | {!! date("d-m-Y",strtotime($now)) !!}</span> --}}
-                                <span class="text-danger text-sm font-weight-bolder">2024</span>
+                                <span class="text-danger text-sm font-weight-bolder">{!! date("d-m-Y",strtotime($year)) !!}
+                                        | {!! date("d-m-Y",strtotime($now)) !!}</span>
                             </div>
                         </div>
                         <div class="col-4 text-end">
@@ -87,13 +81,11 @@
                             <div class="numbers">
                                 <p class="text-sm mb-0 text-uppercase font-weight-bold">Tổng doanh thu</p>
                                 <h5 class="font-weight-bolder">
-                                    {{-- {!! number_format($sum,0,",",".") !!} Vnđ --}}
-                                    10000000 vnd
+                                    {!! number_format($sum,0,",",".") !!} Vnđ
                                 </h5>
                                 <p class="mb-0">
-                                    {{-- <span class="text-warning text-sm font-weight-bolder">{!! date("d-m-Y",strtotime($year)) !!}
-                                        | {!! date("d-m-Y",strtotime($now)) !!}</span> --}}
-                                        <span class="text-warning text-sm font-weight-bolder">2024</span>
+                                    <span class="text-warning text-sm font-weight-bolder">{!! date("d-m-Y",strtotime($year)) !!}
+                                        | {!! date("d-m-Y",strtotime($now)) !!}</span>
                                 </p>
                             </div>
                         </div>
@@ -112,7 +104,7 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0">
-                    <h6>Doanh thu</h6>
+                    <h6>Thông kê</h6>
                 </div>
                 <div class="card-body ms-8">
                     <div class="row">
@@ -170,7 +162,7 @@
                 <div class="card-header pb-0 p-3">
                     <div class="d-flex justify-content-between ">
                         <h6 class="mb-2">
-                            Doanh thu theo rạp
+                            Doanh thu theo phim
                         </h6>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#movie" class="float-end">Xem tất cả</a>
                     </div>
@@ -178,34 +170,36 @@
                 <div class="table-responsive">
                     <table class="table align-items-center ">
                         <tbody>
+                            @foreach($movies->where('status', 1)->take(4) as $movie)
                             <tr>
                                 <td class="w-30">
                                     <div class="d-flex px-2 py-1 align-items-center">
                                         <div class="ms-4">
-                                            <p class="text-xs font-weight-bold mb-0">Phim</p>
+                                            <p class="text-xs font-weight-bold mb-0">Tên phim</p>
                                             <h6 class="text-sm mb-0">
-                                                Tên phim
+                                                {{$movie['name']}}
                                             </h6>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="text-center">
-                                        <p class="text-xs font-weight-bold mb-0">Số vé đã bán</p>
+                                        <p class="text-xs font-weight-bold mb-0">Số vé bán</p>
                                         <h6 class="text-sm mb-0">
-                                            20
+                                            {{$movie['ticketseats']}}
                                         </h6>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="text-center">
-                                        <p class="text-xs font-weight-bold mb-0">Doanh thu</p>
+                                        <p class="text-xs font-weight-bold mb-0">Tổng tiền</p>
                                         <h6 class="text-sm mb-0">
-                                            20000000 đ
+                                            {{number_format($movie['totalPrice'],0,",",".")}} đ
                                         </h6>
                                     </div>
                                 </td>
                             </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -222,32 +216,34 @@
                 <div class="table-responsive">
                     <table class="table align-items-center ">
                         <tbody>
+                            @foreach($theaters->take(4) as $theater)
                             <tr>
                                 <td class="w-30">
                                     <div class="d-flex px-2 py-1 align-items-center">
                                         <div class="ms-4">
-                                            <p class="text-xs font-weight-bold mb-0">Rạp chiếu</p>
-                                            <h6 class="text-sm mb-0">Rạp Ninh Kiều</h6>
+                                            <p class="text-xs font-weight-bold mb-0">Rạp</p>
+                                            <h6 class="text-sm mb-0">{!! $theater['name'] !!}</h6>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="text-center">
-                                        <p class="text-xs font-weight-bold mb-0">Vé đã bán</p>
+                                        <p class="text-xs font-weight-bold mb-0">Số vé bán</p>
                                         <h6 class="text-sm mb-0">
-                                            20
+                                            {{$theater['ticketseats']}}
                                         </h6>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="text-center">
-                                        <p class="text-xs font-weight-bold mb-0">Doanh thu</p>
+                                        <p class="text-xs font-weight-bold mb-0">Tổng tiền</p>
                                         <h6 class="text-sm mb-0">
-                                            200000000 đ
+                                            {{number_format($theater['totalPrice'],0,",",".")}} đ
                                         </h6>
                                     </div>
                                 </td>
                             </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -261,9 +257,6 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="movie_title">
                         Doanh thu theo phim
-                        <label for="search_movie">
-                            <input type="text" placeholder="Nhập tên phim " class="form-controller" id="search_movie" name="search_movie" />
-                        </label>
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -273,33 +266,36 @@
                             <div class="table-responsive">
                                 <table class="table align-items-center ">
                                     <tbody id="tbody_movie">
-                                        <td class="w-30">
-                                            <div class="d-flex px-2 py-1 align-items-center">
-                                                <div class="ms-4">
-                                                    <p class="text-xs font-weight-bold mb-0">Phim</p>
+                                        @foreach($movies as $movie)
+                                        <tr>
+                                            <td class="w-30">
+                                                <div class="d-flex px-2 py-1 align-items-center">
+                                                    <div class="ms-4">
+                                                        <p class="text-xs font-weight-bold mb-0">Tên phim</p>
+                                                        <h6 class="text-sm mb-0">
+                                                            {{$movie['name']}}
+                                                        </h6>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="text-center">
+                                                    <p class="text-xs font-weight-bold mb-0">Số vé bán</p>
                                                     <h6 class="text-sm mb-0">
-                                                        Tên phim
+                                                        {{$movie['ticketseats']}}
                                                     </h6>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="text-center">
-                                                <p class="text-xs font-weight-bold mb-0">Vé đã bán</p>
-                                                <h6 class="text-sm mb-0">
-                                                    20
-                                                </h6>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="text-center">
-                                                <p class="text-xs font-weight-bold mb-0">Doanh thu</p>
-                                                <h6 class="text-sm mb-0">
-                                                    2000000000
-                                                </h6>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                            </td>
+                                            <td>
+                                                <div class="text-center">
+                                                    <p class="text-xs font-weight-bold mb-0">Tổng tiền</p>
+                                                    <h6 class="text-sm mb-0">
+                                                        {{number_format($movie['totalPrice'],0,",",".")}} đ
+                                                    </h6>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -316,9 +312,6 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="theater_modal_title">
                         Doanh thu theo rạp
-                        <label for="search_theater">
-                            <input type="text" placeholder="Nhập rạp " class="form-controller" id="search_theater" name="search_theater" />
-                        </label>
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -328,21 +321,21 @@
                             <div class="table-responsive">
                                 <table class="table align-items-center ">
                                     <tbody id="tbody_theater">
-
+                                        @foreach($theaters as $theater)
                                         <tr>
                                             <td class="w-30">
                                                 <div class="d-flex px-2 py-1 align-items-center">
                                                     <div class="ms-4">
                                                         <p class="text-xs font-weight-bold mb-0">Rạp</p>
-                                                        <h6 class="text-sm mb-0">Tên rạp</h6>
+                                                        <h6 class="text-sm mb-0">{!! $theater['name'] !!}</h6>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="text-center">
-                                                    <p class="text-xs font-weight-bold mb-0">Vé đã bán</p>
+                                                    <p class="text-xs font-weight-bold mb-0">Số vé bán</p>
                                                     <h6 class="text-sm mb-0">
-                                                        20
+                                                        {{$theater['ticketseats']}}
                                                     </h6>
                                                 </div>
                                             </td>
@@ -350,11 +343,12 @@
                                                 <div class="text-center">
                                                     <p class="text-xs font-weight-bold mb-0">Tổng tiền</p>
                                                     <h6 class="text-sm mb-0">
-                                                        222222 đ
+                                                        {{number_format($theater['totalPrice'],0,",",".")}} đ
                                                     </h6>
                                                 </div>
                                             </td>
                                         </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -366,5 +360,200 @@
         </div>
     </div>
 
+
 </section>
+@endsection
+
+@section('js')
+    <script>
+        flatpickr($("#end_time"), {
+        maxDate: "today",
+        dateFormat: "Y-m-d ",
+        "locale": "@lang('lang.language')"
+        });
+        start_time = flatpickr($("#start_time"), {
+            maxDate: "today",
+            dateFormat: "Y-m-d ",
+            "locale": "@lang('lang.language')"
+        });
+        $('#end_time').on("change", function() {
+            start_time.set(
+                'maxDate', $('#end_time').val()
+            );
+        });
+        $(document).ready(function() {
+            var chart = new Morris.Bar({
+                element: 'admin_chart',
+                barColors: ['#09b1f3', '#fc8710', '#FF6541', '#A4ADD3', '#766B56'],
+                parseTime: false,
+                hideHover: 'auto',
+                data: [{
+                    date: null,
+                    total: null
+                }],
+                xkey: 'date',
+                ykeys: ['total'],
+                labels: ['total']
+            });
+        //btn-statistical-filter-from-to-date
+        $('#btn-statistical-filter').click(function() {
+            var from_date = $('#start_time').val();
+            var to_date = $('#end_time').val();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "admin/filter-by-date",
+                method: "GET",
+                datatype: "JSON",
+                data: {
+                    from_date: from_date,
+                    to_date: to_date
+                },
+                success: function(data) {
+                    $('#admin_chart').empty();
+                    chart = new Morris.Bar({
+                        element: 'admin_chart',
+                        barColors: ['#09b1f3', '#fc8710', '#FF6541', '#A4ADD3', '#766B56'],
+                        parseTime: false,
+                        hideHover: 'auto',
+                        data: [{
+                            date: null,
+                            total: null
+                        }],
+                        xkey: 'date',
+                        ykeys: ['total'],
+                        labels: ['total']
+                    });
+                    if (data['success']) {
+                        chart.setData(data.chart_data);
+                    } else if (data['error']) {
+                        alert(data.error);
+                    }
+                },
+
+            })
+        });
+
+        //statistical-filter
+        $('.statistical-filter').change(function() {
+            var statistical_value = $(this).val();
+            if (statistical_value === "null") {
+                chart.setData([{
+                    date: null,
+                    total: null,
+                    seat_count: null
+                }]);
+                return;
+            }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: "admin/statistical-filter",
+                method: "GET",
+                datatype: "JSON",
+                data: {
+                    'statistical_value': statistical_value,
+                },
+                success: function(data) {
+                    $('#admin_chart').empty();
+                    chart = new Morris.Bar({
+                        element: 'admin_chart',
+                        barColors: ['#09b1f3', '#fc8710', '#FF6541', '#A4ADD3', '#766B56'],
+                        parseTime: false,
+                        hideHover: 'auto',
+                        data: [{
+                            date: null,
+                            total: null
+                        }],
+                        xkey: 'date',
+                        ykeys: ['total'],
+                        labels: ['total']
+                    });
+                    if (data['success']) {
+                        chart.setData(data.chart_data);
+                    } else if (data['error']) {
+                        alert(data.error);
+                    }
+                }
+            });
+        });
+
+        //statistical sortby
+        $('.statistical-sortby').change(function() {
+            var statistical_value = $(this).val();
+            if (statistical_value === "null") {
+                chart.setData([{
+                    date: null,
+                    seat_count: null
+                }]);
+                return;
+            }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "admin/statistical-sortby",
+                method: "GET",
+                datatype: "JSON",
+                data: {
+                    'statistical_value': statistical_value,
+                },
+                success: function(data) {
+                    $('#admin_chart').empty();
+                    if (statistical_value == 'ticket') {
+                        chart = new Morris.Bar({
+                            element: 'admin_chart',
+                            barColors: ['#fc8710', '#FF6541', '#A4ADD3', '#766B56'],
+                            parseTime: false,
+                            hideHover: 'auto',
+                            data: [{
+                                date: null,
+                                seat_count: null
+                            }],
+                            xkey: 'date',
+                            ykeys: ['seat_count'],
+                            labels: ['seat_count']
+                        });
+                        if (data['success']) {
+                            chart.setData(data.chart_data);
+                        } else if (data['error']) {
+                            alert(data.error);
+                        }
+                    } else if (statistical_value == 'theater') {
+                        chart = new Morris.Bar({
+                            element: 'admin_chart',
+                            barColors: ['#fc8710', '#2dce89', '#A4ADD3', '#766B56'],
+                            parseTime: false,
+                            hideHover: 'auto',
+
+                            data: [{
+                                date: null,
+                                '1': null,
+                                '2': null,
+                                '3': null
+                            }],
+                            xkey: 'date',
+                            ykeys: ['1', '2', '3'],
+                            labels: ['Rạp Cao Lỗ', 'Rạp Hồ Gươm', 'Rạp VinCom Đà Nẵng']
+                        });
+                        if (data['success']) {
+                            chart.setData(data.chart_data);
+                        } else if (data['error']) {
+                            alert(data.error);
+                        }
+                    }
+                }
+            });
+        });
+    });
+    </script>
 @endsection

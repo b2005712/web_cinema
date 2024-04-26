@@ -6,6 +6,7 @@ use App\Models\Info;
 use App\Models\User;
 use App\Models\Movie;
 use App\Models\Theater;
+use App\Models\Banner;
 use App\Models\Schedule;
 use App\Models\RoomType;
 use App\Models\SeatType;
@@ -54,7 +55,11 @@ class MainController extends Controller
 
     public function home(){
         $movies = Movie::where('status', 1)->get();
-        return view('web.home', ['movies' => $movies]);
+        $banners = Banner::where('status', 1)->get();
+        return view('web.home', [
+            'movies' => $movies,
+            'banners' => $banners
+        ]);
     }
 
     public function movieDetails($id, Request $request)
@@ -273,12 +278,13 @@ class MainController extends Controller
         $redirectUrl = "http://127.0.0.1:8000/ticketPaid/".$ticket_id;
         $ipnUrl = "http://127.0.0.1:8000/ticketPaid/".$ticket_id;
         $extraData = "";
+        $autoCapture =FALSE;
 
             $requestId = time() . "";
             $requestType = "captureWallet";
             // $extraData = ($_POST["extraData"] ? $_POST["extraData"] : "");
             //before sign HMAC SHA256 signature
-            $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
+            $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId  . "&requestType=" . $requestType;
             $signature = hash_hmac("sha256", $rawHash, $secretKey);
             $data = array('partnerCode' => $partnerCode,
                 'partnerName' => "Test",
@@ -297,7 +303,10 @@ class MainController extends Controller
             $jsonResult = json_decode($result, true);  // decode json
             //Just a example, please check more in there
             return redirect($jsonResult['payUrl']);
+            sleep(10);
+
     }
+
 
     public function paymentATM($ticket_id){
         $ticket = Ticket::find($ticket_id);
@@ -333,6 +342,7 @@ class MainController extends Controller
         $redirectUrl = "http://127.0.0.1:8000/ticketPaid/".$ticket_id;
         $ipnUrl = "http://127.0.0.1:8000/ticketPaid/".$ticket_id;
         $extraData = "";
+        
 
         $requestId = time() . "";
         $requestType = "payWithATM";

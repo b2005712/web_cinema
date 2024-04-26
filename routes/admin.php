@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\CastController;
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\ComboController;
 use App\Http\Controllers\DirectorController;
 use App\Http\Controllers\DiscountController;
@@ -20,11 +20,15 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\InfoController;
 use Illuminate\Support\Facades\Route;
 
+use Illuminate\Pagination\Paginator;
+
+
 
 Route::prefix('admin')->group(function () {
 
     Route::get('/', [AdminController::class, 'home']);
     Route::get('/logout', [AdminController::class, 'home']);
+    Route::get('/filter-by-date', [AdminController::class, 'filter_by_date']);
     //TODO Movie Genres
     Route::prefix('movie_genres')->group(function () {
         Route::get('/', [MovieGenresController::class, 'movie_genres']);
@@ -124,15 +128,33 @@ Route::prefix('admin')->group(function () {
         Route::delete('/delete/{id}', [UserController::class, 'delete']);
     });
 
+    Route::prefix('staff')->group(function () {
+        Route::get('/', [AdminController::class, 'staff']);
+        Route::post('/create', [AdminController::class, 'postCreate']);
+        Route::delete('/delete/{id}', [AdminController::class, 'delete']);
+    });
+
+    Route::prefix('buyTicket')->group(function () {
+        Route::post('/handleResult', [StaffController::class, 'handleResult']);
+        Route::post('/createPayment', [StaffController::class, 'createPayment']);
+        Route::post('/ticketPayment', [StaffController::class, 'ticketPayment']);
+        Route::post('/scanBC', [StaffController::class, 'scanBarcode']);
+        Route::get('/{schedule_id}', [StaffController::class, 'ticket']);
+        Route::get('/', [StaffController::class, 'buyTicket']);
+    });
+
+    Route::post('/ticketCombo/create', [StaffController::class, 'createTicketCombo']);
+    Route::prefix('buyCombo')->group(function () {
+        Route::get('/', [StaffController::class, 'buyCombo']);
+    });
+
     //TODO banners
-
-
-    //TODO Cast
-    Route::prefix('cast')->group(function () {
-        Route::get('/', [CastController::class, 'cast']);
-        Route::post('/create', [CastController::class, 'postCreate']);
-        Route::post('/edit/{id}', [CastController::class, 'postEdit']);
-        Route::delete('/delete/{id}', [CastController::class, 'delete']);
+    Route::prefix('banners')->group(function () {
+        Route::get('/', [BannerController::class, 'banners']);
+        Route::post('/create', [BannerController::class, 'postCreate']);
+        Route::post('/edit/{id}', [BannerController::class, 'postEdit']);
+        Route::delete('/delete/{id}', [BannerController::class, 'delete']);
+        Route::get('/status', [BannerController::class, 'status']);
     });
 
     //TODO Combo

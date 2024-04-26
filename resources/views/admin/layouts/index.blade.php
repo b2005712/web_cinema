@@ -143,7 +143,7 @@
                     console.error(error);
             });
     </script>
-    @yield('scripts')
+    @yield('js')
 
 </body>
 

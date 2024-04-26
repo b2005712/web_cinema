@@ -53,25 +53,6 @@
                                 <p>{{ $errors->first('phone') }}</p>
                             @endif
                         </div>
-                        <div class="row">
-                            <div class="mb-3 col-sm-6">
-                                <label for="birth" class="form-label fw-bold">Ngày sinh</label>
-                                <input type="date" class="form-control" id="birth" name="birth">
-                                @if ($errors->has('birth'))
-                                    <p>{{ $errors->first('birth') }}</p>
-                                @endif
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="form-label fw-bold">Giới tính</label><br>
-                                <input type="radio" class="form-check-input" id="men" name="gender" value="Nam">
-                                <label for="men" class="form-label fw-bold">Nam</label>
-                                <input type="radio" class="form-check-input" id="women" name="gender" value="Nữ">
-                                <label for="woman" class="form-label fw-bold">Nữ</label>
-                                @if ($errors->has('gender'))
-                                    <p>{{ $errors->first('gender') }}</p>
-                                @endif
-                            </div>
-                        </div>
                         <div class="mb-3">
                             <label for="password" class="form-label fw-bold">Mật khẩu</label>
                             <input type="password" class="form-control" id="password" name="password">

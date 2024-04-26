@@ -13,7 +13,7 @@ class MovieController extends Controller
 {
     public function movie()
     {
-        $movies = Movie::orderBy('id', 'DESC')->Paginate(5);
+        $movies = Movie::orderBy('id', 'DESC')->Paginate(3);
         return view('admin.web.movie', ['movies' => $movies]);
     }
 
@@ -42,8 +42,6 @@ class MovieController extends Controller
                     'endDate' => $request->endDate,
                     'national' => $request->national,
                     'rating_id' => $request->rating,
-                    'director' => $request->director,
-                    'cast' => $request->cast,
                     'description' => $request->description,
                     'trailer'=> $request->trailer
                 ]

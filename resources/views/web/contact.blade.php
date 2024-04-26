@@ -1,7 +1,7 @@
 @extends('web.layouts.app')
 @section('content')
 <section class="container">
-    <div class="background">
+    {{-- <div class="background">
         <div class="container">
           <div class="screen">
             <div class="screen-header">
@@ -54,7 +54,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> --}}
 </section>
 
 @endsection

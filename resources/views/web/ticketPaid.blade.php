@@ -314,14 +314,6 @@
                         Thanh toán qua thẻ ATM/Tài khoản nội địa
                     @endif
                 </div>
-                <div>
-                    Trạng thái: 
-                    @if ($ticket->hasPaid)
-                        Đã thanh toán
-                    @else
-                        Chưa thanh toán
-                    @endif
-                </div>
             </div>
         </div>
         <div style="display: flex; justify-content: center; letter-spacing: 20px;" class="mt-5">

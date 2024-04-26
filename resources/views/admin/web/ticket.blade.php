@@ -84,9 +84,9 @@
                                 <td class="align-middle text-center text-sm">
                                     @if($value['schedule_id']!= NULL)
                                         @if( $value['status'] == 1)
-                                            <span class="badge badge-sm bg-gradient-secondary">Đã quét</span>
+                                            <span class="badge badge-sm bg-gradient-secondary">Đã xong</span>
                                         @else
-                                            <span class="badge badge-sm bg-gradient-success">Chưa quét</span>
+                                            <span class="badge badge-sm bg-gradient-success">Chờ</span>
                                         @endif
                                     @else
                                         <span class=""><i class="fa-regular fa-ban"></i></span>
@@ -128,6 +128,9 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div class="d-flex justify-content-center mt-3">
+                    {!! $ticket->links() !!}
                 </div>
             </div>
         </div>

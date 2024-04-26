@@ -75,7 +75,7 @@
                                         @elseif($movie->rating->name == 'K') bg-primary
                                         @else bg-info
                                         @endif me-1">{!! $movie->rating->name !!}</span>
-                                        <div class="product-info">
+                                        <div class="product-info" style="min-height: 116px">
                                             <h2 class="product-name">{!! $movie['name'] !!}</h2>
                                             <div class="movie-info">
                                                 <span class="bold">Thể loại: </span>
@@ -99,10 +99,7 @@
                                             </div>
                                         </div>
                                         <ul>
-                                            <li class="like">
-                                                <button class="btn btn-like"><i class="fa fa-thumbs-up"></i> Like 12</button>
-                                            </li>
-                                            <li class="booking">
+                                            <li class="booking mt-3" style="float: right ">
                                                 <button class="btn btn-booking"><i class="fa-solid fa-receipt"></i> Đặt vé</button>
                                             </li>
                                         </ul>
@@ -139,7 +136,7 @@
                                         @elseif($movie->rating->name == 'K') bg-primary
                                         @else bg-info
                                         @endif me-1">{!! $movie->rating->name !!}</span>
-                                        <div class="product-info">
+                                        <div class="product-info" style="min-height: 116px">
                                             <h2 class="product-name">{!! $movie['name'] !!}</h2>
                                             <div class="movie-info">
                                                 <span class="bold">Thể loại: </span>
@@ -163,10 +160,7 @@
                                             </div>
                                         </div>
                                         <ul>
-                                            <li class="like">
-                                                <button class="btn btn-like"><i class="fa fa-thumbs-up"></i> Like 12</button>
-                                            </li>
-                                            <li class="booking">
+                                            <li class="booking mt-3" style="float: right ">
                                                 <button class="btn btn-booking"><i class="fa-solid fa-receipt"></i> Đặt vé</button>
                                             </li>
                                         </ul>

@@ -9,13 +9,21 @@ use App\Models\RoomType;
 use App\Models\SeatType;
 use Illuminate\Http\Request;
 
-
+use Illuminate\Pagination\Paginator;
+use Carbon\Carbon;
 
 class TicketController extends Controller
 {
     public function ticket()
     {
-        $ticket = Ticket::orderBy('id', 'DESC')->get();
+        $tickets = Ticket::where('status', false)->get();
+        foreach ($tickets as $ticket) {
+            if ($ticket->schedule->endTime >= date('H:i:s')) {
+                $ticket->status = true;
+                $ticket->save();
+            }
+        }
+        $ticket = Ticket::orderBy('id', 'DESC')->Paginate(10);
         return view('admin.web.ticket',['ticket'=>$ticket]);
     }
 

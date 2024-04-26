@@ -10,6 +10,7 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\SeatController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 
 
 /*
@@ -26,7 +27,7 @@ use App\Http\Controllers\UserController;
 require 'admin.php';
 
 // Test
-Route::get('/admin', [MainController::class, 'admin']);
+Route::get('/admin', [AdminController::class, 'home']);
 
 
 Route::get('/', [MainController::class, 'home']);

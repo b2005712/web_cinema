@@ -53,8 +53,4 @@ class User extends Authenticatable
         return $this->hasMany(Ticket::class, 'user_id', 'id');
     }
 
-    public function checkRole($role)
-    {
-        return $this->role === $role;
-    }
 }

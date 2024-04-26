@@ -58,10 +58,7 @@
                             - {{ $movie->rating->description }}
                         </div>
                         <ul>
-                            <li class="like">
-                                <button class="btn btn-like"><i class="fa fa-thumbs-up"></i> Like 12</button>
-                            </li>
-                            <li class="booking">
+                            <li class="booking mt-3">
                                 <button class="btn btn-booking" data-bs-toggle="modal" data-bs-target="#datve"><i class="fa-solid fa-receipt"></i> Đặt vé</button>
                             </li>
                         </ul>

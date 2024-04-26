@@ -20,7 +20,6 @@
                         </li>
                         <li><a href="/theater">Rạp chiếu</a></li>
                         <li><a href="/news">Tin tức</a></li>
-                        <li><a href="/contact">Liên hệ\Dịch vụ</a></li>
                         <li class="profile dropdown">
                             @if (Auth::check())
                                 <a href="#" class="profile-a" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ Auth::user()->fullname }}</a>

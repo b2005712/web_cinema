@@ -72,15 +72,15 @@
                     <span class="nav-link-text ms-1">Khách hàng</span>
                 </a>
             </li>
-            {{-- <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link @yield('active')" href="/admin/staff">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-user-tie text-danger text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Nhân viên</span>
                 </a>
-            </li> --}}
-            {{-- <li class="nav-item">
+            </li>
+            <li class="nav-item">
                 <a class="nav-link @yield('active')" href="/admin/banners">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="fa-solid fa-rectangle-ad text-success text-sm opacity-10"></i>
@@ -89,19 +89,27 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link @yield('active')" href="/admin/feedback">
-                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fa-regular fa-comment-lines text-warning text-sm opacity-10"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Liên hệ/Dịch vụ</span>
-                </a>
-            </li> --}}
-            <li class="nav-item">
                 <a class="nav-link @yield('active')" href="/admin/info">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="fa-sharp fa-regular text-info text-sm  fa-circle-info"></i>
                     </div>
                     <span class="nav-link-text ms-1">Thông tin</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @yield('active')" href="./admin/buyTicket">
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fa-sharp fa-light fa-ticket-simple text-success text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Bán Vé</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @yield('active')" href="./admin/buyCombo">
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fa-solid fa-burger-soda text-danger text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Bán combo</span>
                 </a>
             </li>
         </ul>
