@@ -32,10 +32,6 @@ class AuthController extends Controller
         $phone = Auth::attempt(['phone' => $request['username'], 'password' => $request['password']]);
 
         if ($email || $phone) {
-            if(Auth::user()->role =='admin')
-            {
-                return redirect('/admin')->with('success','Đăng nhập tài khoản admin thành công');
-            }
             if($request->has('rememberme')){
                 session(['username_web'=>$request->username]);
                 session(['password_web'=>$request->password]);
@@ -43,7 +39,7 @@ class AuthController extends Controller
                 session()->forget('username_web');
                 session()->forget('password_web');
             }
-            return redirect('/')->with('success','Chào mừng bạn '.Auth::user()->fullName.' !');
+            return redirect('/')->with('success','Chào mừng bạn '.Auth::user()->fullname.' !');
         } else {
             return redirect($request->url)->with('warning','Sai tài khoản hoặc mật khẩu');
         }
@@ -55,7 +51,6 @@ class AuthController extends Controller
             'fullname' => 'required|min:1',
             'email' => 'required|max:255|unique:users',
             'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|max:12|unique:users',
-            'gender' => 'required',
             'agreement' => 'required',
             'password' => 'required|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$/',
             'repassword' => 'required|same:password',
@@ -70,24 +65,27 @@ class AuthController extends Controller
             'password.required' => 'Vui lòng nhập mật khẩu',
             'repassword.required' => 'Vui lòng nhập lại mật khẩu',
             'repassword.same' => "Mật khẩu nhập lại không trùng khớp",
-            'gender.required' => "Vui lòng chọn giới tính",
             'agreement.required' => "Vui lòng đồng ý với điều khoản",
         ]);
         $user = new User([
             'fullname'=>$request['fullname'],
             'password'=>bcrypt($request['password']),
             'email'=>$request['email'],
-            'Brith'=>$request['brith'],
-            'gender'=>$request['gender'],
             'phone'=>$request['phone'],
             'code'=>rand(1000000000000000, 9999999999999999),
             'role' => 'user'
         ]);
         $user->save();
         if($user){
+            if($request->type == 'staff'){
+                return redirect('/admin/addUser')->with('success', 'Đăng ký thành công')->with('user', $user);
+            }
             return redirect('/login')->with('success', 'Đăng ký thành công');
         }
         else{
+            if($request->type == 'staff'){
+                return redirect('/admin/addUser')->with('fail', 'Đăng ký không thành công');
+            }
             return redirect('/')->with('fail', 'Đăng ký không thành công');
         }
     }

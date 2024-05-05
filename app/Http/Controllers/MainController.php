@@ -190,7 +190,6 @@ class MainController extends Controller
         foreach ($request->ticketSeats as $i => $seat) {
             $seatArray = json_decode($seat, true);
             foreach ($seatArray as $seatId => $seats) {
-                // Lấy thông tin từ mỗi combo
                 $seatRow = $seats[0];
                 $seatCol = $seats[1];
                 $seatPrice = $seats[2];
@@ -223,6 +222,11 @@ class MainController extends Controller
         }
         if($request->ticketPayment === 'QR'){
             return redirect('/paymentQR/' . $ticket->id);
+        }
+        if($request->ticketPayment === 'MONEY'){
+            return view('admin.web.payTicket', [
+                'ticket' => $ticket
+            ]);
         }
         if($request->ticketPayment === 'ATM'){
             return redirect('/paymentATM/' . $ticket->id);
@@ -302,9 +306,12 @@ class MainController extends Controller
             $result = execPostRequest($endpoint, json_encode($data));
             $jsonResult = json_decode($result, true);  // decode json
             //Just a example, please check more in there
-            return redirect($jsonResult['payUrl']);
+            redirect($jsonResult['payUrl']);
             sleep(10);
-
+            $endpoint1 = "https://test-payment.momo.vn/v2/gateway/api/confirm";
+            $requestType1 = "capture";
+            $rawHash1 = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId  . "&requestType=" . $requestType;
+            $signature = hash_hmac("sha256", $rawHash, $secretKey);
     }
 
 
@@ -381,6 +388,8 @@ class MainController extends Controller
             ]
         );
         $result = new Collection();
+        $genres = MovieGenres::all();
+        $rating = Rating::all();
         $movies = Movie::select('movies.*')
             ->join('movieGenres_movies', 'movies.id', '=', 'movieGenres_movies.movie_id')
             ->join('movie_genres', 'movieGenres_movies.movieGenre_id', '=', 'movie_genres.id')
@@ -392,29 +401,70 @@ class MainController extends Controller
                 $result->push($movie);
             }
         }
-        return view('web.search', ['result' => $result, 'search' => $request->search]);
+        return view('web.search', [
+            'result' => $result,
+            'search' => $request->search,
+            'genres' => $genres, 
+            'rating' => $rating, 
+        ]);
     }
 
     public function movieFilter(Request $request){
-        $result = new Collection();
-        foreach ($request->movieGenres as $value) {
-            $movies = Movie::select('movies.*')
-            ->join('movieGenres_movies', 'movies.id', '=', 'movieGenres_movies.movie_id')
-            ->join('movie_genres', 'movieGenres_movies.movieGenre_id', '=', 'movie_genres.id')
-            ->where('movies.status', '=', '1')
-            ->where('movie_genres.id', '=', $value)->get();
-            foreach ($movies as $movie) {
-                if (!$result->contains('id', $movie->id)) {
-                    $result->push($movie);
+        $result1 = new Collection();
+        $result2 = new Collection();
+        $MovieGenre = new Collection();
+        $search = '';
+        $genres = MovieGenres::all();
+        $rating = Rating::all();
+        if ($request->movieGenres) {
+            foreach ($request->movieGenres as $value) {
+                $movies = Movie::select('movies.*')
+                    ->join('movieGenres_movies', 'movies.id', '=', 'movieGenres_movies.movie_id')
+                    ->join('movie_genres', 'movieGenres_movies.movieGenre_id', '=', 'movie_genres.id')
+                    ->where('movies.status', '=', '1')
+                    ->where('movie_genres.id', '=', $value)->get();
+    
+                foreach ($movies as $movie) {
+                    if (!$result1->contains('id', $movie->id)) {
+                        $result1->push($movie);
+                    }
                 }
+    
+                $genre = MovieGenres::find($value);
+                $MovieGenre->push($genre);
             }
         }
+        
         if ($request->rating){
-            $rating = Rating::find($request->rating);
+            $rate = Rating::find($request->rating);
+            $movies = Movie::where('rating_id', $request->rating)->get();
             
+            foreach ($movies as $movie) {
+                if (!$result2->contains('id', $movie->id)) {
+                    $result2->push($movie);
+                }
+            }
+        }else{
+            $rate = new Rating();
         }
-        dd($result);
-
-
+    
+        if($result1->isNotEmpty() && $result2->isNotEmpty()) {
+            $result = $result1->intersect($result2);
+        } elseif($result1->isNotEmpty() && $result2->isEmpty()) {
+            $result = $result1;
+        } elseif($result1->isEmpty() && $result2->isNotEmpty()) {
+            $result = $result2;
+        } else {
+            $result = new Collection(); 
+        }
+        return view('web.search', [
+            'result' => $result, 
+            'rate' => $rate,
+            'search' => $search,
+            'movieGenres' => $MovieGenre, 
+            'genres' => $genres, 
+            'rating' => $rating, 
+        ]);
     }
+    
 }

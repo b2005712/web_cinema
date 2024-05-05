@@ -27,7 +27,10 @@ use Illuminate\Pagination\Paginator;
 Route::prefix('admin')->group(function () {
 
     Route::get('/', [AdminController::class, 'home']);
-    Route::get('/logout', [AdminController::class, 'home']);
+    Route::post('/login', [AdminController::class, 'login']);
+    Route::get('/logout', [AdminController::class, 'logout']);
+    Route::get('/paymentQR/{ticket_id}', [StaffController::class, 'paymentQR']);
+    Route::post('/ticketCreate', [StaffController::class, 'createTicket']);
     Route::get('/filter-by-date', [AdminController::class, 'filter_by_date']);
     //TODO Movie Genres
     Route::prefix('movie_genres')->group(function () {
@@ -136,16 +139,20 @@ Route::prefix('admin')->group(function () {
 
     Route::prefix('buyTicket')->group(function () {
         Route::post('/handleResult', [StaffController::class, 'handleResult']);
-        Route::post('/createPayment', [StaffController::class, 'createPayment']);
-        Route::post('/ticketPayment', [StaffController::class, 'ticketPayment']);
+        Route::post('/checkUser', [StaffController::class, 'checkUser']);
+        Route::delete('/delete/{id}', [StaffController::class, 'delete']);
         Route::post('/scanBC', [StaffController::class, 'scanBarcode']);
+        Route::get('/Success', [StaffController::class, 'Hadpaid']);
         Route::get('/{schedule_id}', [StaffController::class, 'ticket']);
         Route::get('/', [StaffController::class, 'buyTicket']);
+        Route::delete('/', [StaffController::class, 'buyTicket']);
     });
 
     Route::post('/ticketCombo/create', [StaffController::class, 'createTicketCombo']);
     Route::prefix('buyCombo')->group(function () {
         Route::get('/', [StaffController::class, 'buyCombo']);
+        Route::get('/QR', [StaffController::class, 'paymentQR2']);
+        Route::get('/handleResult', [StaffController::class, 'handleResult']);
     });
 
     //TODO banners
@@ -176,5 +183,10 @@ Route::prefix('admin')->group(function () {
     Route::prefix('info')->group(function () {
         Route::get('/', [AdminController::class, 'info']);
         Route::post('/', [AdminController::class, 'postInfo']);
+    });
+
+    Route::prefix('addUser')->group(function () {
+        Route::get('/', [StaffController::class, 'addUser']);
+        Route::get('/signUp', [AuthController::class, 'signUp']);
     });
 });

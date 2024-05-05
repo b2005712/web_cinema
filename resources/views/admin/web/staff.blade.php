@@ -52,7 +52,7 @@
                                             @endif</span>
                                         </td>
                                         <td class="align-middle text-center">
-                                            <span class="text-secondary font-weight-bold">1</span>
+                                            <span class="text-secondary font-weight-bold">{{ $value->StaffTheater->name }}</span>
                                         </td>
                                         <td class="align-middle">
                                             <a href="javascript:void(0)" data-url="{{ url('admin/staff/delete', $value['id'] ) }}" class="text-secondary font-weight-bold text-xs delete-staff" data-toggle="tooltip" data-original-title="Edit user">
@@ -137,7 +137,7 @@
         </div>
     </div>
 @endsection
-@section('scripts')
+@section('js')
 <script>
     function selects() {
         var ele = document.getElementsByName('permission[]');

@@ -53,4 +53,8 @@ class User extends Authenticatable
         return $this->hasMany(Ticket::class, 'user_id', 'id');
     }
 
+    public function StaffTheater()
+    {
+        return $this->hasOneThrough(Theater::class, StaffTheater::class, 'user_id', 'id', 'id', 'theater_id');
+    }
 }

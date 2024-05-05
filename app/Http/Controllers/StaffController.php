@@ -8,10 +8,13 @@ use App\Models\Movie;
 use App\Models\Price;
 use App\Models\RoomType;
 use App\Models\Schedule;
+use App\Models\Seat;
 use App\Models\SeatType;
 use App\Models\Ticket;
+use App\Models\TicketSeat;
 use App\Models\TicketCombo;
 use App\Models\TicketFood;
+use App\Models\StaffTheater;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -19,9 +22,11 @@ use Illuminate\Support\Facades\Auth;
 
 class StaffController extends Controller
 {
-
+    public function addUser(){
+        return view('admin.web.addUser');
+    }
     public function buyTicket(Request $request) {
-        $theater = Auth::user()->theater;
+        $theater = Auth::user()->StaffTheater;
         if (isset($request->date)) {
             $date_cur = $request->date;
         } else {
@@ -33,13 +38,13 @@ class StaffController extends Controller
             ->get();
         $moviesEarly = Movie::all()->filter(function ($movie) {
             foreach ($movie->schedules as $schedule) {
-                if ($schedule->early && $movie->releaseDate > date('Y-m-d')) {
+                if ($schedule->status && $movie->releaseDate > date('Y-m-d')) {
                     return $movie;
                 }
             }
             return null;
         });
-        return view('admin.buyTicket.buyTicket', [
+        return view('admin.web.buyTicket', [
             'movies' => $movies,
             'moviesEarly' => $moviesEarly,
             'theater' => $theater,
@@ -48,19 +53,12 @@ class StaffController extends Controller
         ]);
     }
 
+    public function Hadpaid() {
+        return redirect('admin/buyTicket')->with('success', 'Thanh toán thành công!');
+    }
+
+
     public function ticket($schedule_id) {
-        Ticket::where('holdState', false)->where('hasPaid', false)->where('schedule_id', $schedule_id)->delete();
-        $ticketsHolds = Ticket::where('holdState', true)->where('schedule_id', $schedule_id)->get();
-
-        foreach ($ticketsHolds as $ticketsHold) {
-            $time = strtotime(date('Y-m-d H:i:s')) - strtotime($ticketsHold->created_at);
-
-            if ($time > (9*60)) {
-                $ticketsHold->delete();
-            }
-
-        }
-
         $seatTypes = SeatType::all();
         $combos = Combo::where('status', 1)->get();
         $tickets = Ticket::where('schedule_id', $schedule_id)->get();
@@ -78,7 +76,7 @@ class StaffController extends Controller
         $room = $schedule->room;
         $movie = $schedule->movie;
 
-        return view('admin.buyTicket.ticket', [
+        return view('admin.web.ticketBuy', [
             'schedule' => $schedule,
             'room' => $room,
             'seatTypes' => $seatTypes,
@@ -102,144 +100,152 @@ class StaffController extends Controller
         ]);
     }
 
-    public function createPayment(Request $request)
+    public function checkUser(Request $request){
+        $userCode = $request->input('userCode');
+        $user = User::where('code', $userCode)->first();
+
+        if ($user) {
+            return response()->json(['success' => true, 'user' => $user]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function createTicket (Request $request)
     {
-        $ticket = Ticket::find($request->ticket_id);
-        $vnp_TmnCode = "6JQZ09G6"; //Mã định danh merchant kết nối (Terminal Id)
-        $vnp_HashSecret = "QCTWPIWUGYNUJNXJAJMQKHUBCXZMDZXU"; //Secret key
-        $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        $vnp_Returnurl = $request->getSchemeAndHttpHost()
-            . "/payment/result?point=" . $request->point . "type=" . $request->type;
-        $vnp_apiUrl = "http://sandbox.vnpayment.vn/merchant_webapi/merchant.html";
-        $apiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
-        //Config input format
-        //Expire
-        $startTime = date("YmdHis");
-        $expire = date('YmdHis', strtotime('+' . $request->time . 'minutes', strtotime($startTime)));
-
-        $vnp_TxnRef = $ticket->code; //Mã giao dịch thanh toán tham chiếu của merchant
-        $vnp_Amount = $ticket->totalPrice; // Số tiền thanh toán
-        $vnp_Locale = $request->language; //Ngôn ngữ chuyển hướng thanh toán
-        $vnp_BankCode = $request->bankCode; //Mã phương thức thanh toán
-        $vnp_IpAddr = $_SERVER['REMOTE_ADDR']; //IP Khách hàng thanh toán
-
-
-        $inputData = array(
-            "vnp_Version" => "2.1.0",
-            "vnp_TmnCode" => $vnp_TmnCode,
-            "vnp_Amount" => $vnp_Amount * 100,
-            "vnp_Command" => "pay",
-            "vnp_CreateDate" => date('YmdHis'),
-            "vnp_CurrCode" => "VND",
-            "vnp_IpAddr" => $vnp_IpAddr,
-            "vnp_Locale" => $vnp_Locale,
-            "vnp_OrderInfo" => "Thanh toan GD:" . $vnp_TxnRef,
-            "vnp_OrderType" => "other",
-            "vnp_ReturnUrl" => $vnp_Returnurl,
-            "vnp_TxnRef" => $vnp_TxnRef,
-            "vnp_ExpireDate" => $expire
-        );
-
-        if (isset($vnp_BankCode) && $vnp_BankCode != "") {
-            $inputData['vnp_BankCode'] = $vnp_BankCode;
-        }
-
-        ksort($inputData);
-        $query = "";
-        $i = 0;
-        $hashdata = "";
-        foreach ($inputData as $key => $value) {
-            if ($i == 1) {
-                $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
-            } else {
-                $hashdata .= urlencode($key) . "=" . urlencode($value);
-                $i = 1;
+        $ticket = new Ticket([
+            'schedule_id' => $request->schedule_id,
+            'user_id' => $request->user_id,
+            'code'=>rand(1000000000000000, 9999999999999999),
+            'payment' => $request->ticketPayment,
+            'totalPrice' => $request->totalPrice,
+        ]);
+        $ticket->save();
+        if ($request->ticketSeats) {
+            foreach ($request->ticketSeats as $i => $seat) {
+                $seatArray = json_decode($seat, true);
+                foreach ($seatArray as $seatId => $seats) {
+                    $seatRow = $seats[0];
+                    $seatCol = $seats[1];
+                    $seatPrice = $seats[2];
+                    $roomId = new Schedule;
+                    $ticketSeat = new TicketSeat([
+                        'row' => $seatRow,
+                        'col' => $seatCol,
+                        'price' => $seatPrice,
+                        'ticket_id' => $ticket->id,
+                    ]);
+                    $seats = Seat::where('row', $seatRow)->where('col', $seatCol)->where('room_id', $ticket->schedule->room_id)->get()->first();
+                    $ticketSeat->seatType = $seats->seatType->name;
+                    $ticketSeat->save();
+                }
             }
-            $query .= urlencode($key) . "=" . urlencode($value) . '&';
         }
 
-        $vnp_Url = $vnp_Url . "?" . $query;
-        if (isset($vnp_HashSecret)) {
-            $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);//
-            $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
+        if($request->ticketCombos){
+            foreach ($request->ticketCombos as $combo) {
+                $comboArray = json_decode($combo, true);
+                $comboId = key($comboArray);
+                if ($comboId !== null) {
+                    $comboName = $comboArray[$comboId]['name'];
+                    $quantity = $comboArray[$comboId]['quantity'];
+                    $ticketcombo = new TicketCombo([
+                        'comboName' => $comboName,
+                        'quantity' => $quantity,
+                        'ticket_id' => $ticket->id,
+                    ]);
+                    $ticketcombo->save();
+                }
+            }
         }
-        return redirect($vnp_Url);
+
+        if($request->ticketPayment === 'QR'){
+            return redirect('/admin/paymentQR/' . $ticket->id);
+        }
+        if($request->ticketPayment === 'MONEY'){
+            return view('admin.web.payTicket', [
+                'ticket' => $ticket
+            ]);
+        }
+    }
+
+    public function paymentQR($ticket_id){
+        $ticket = Ticket::find($ticket_id);
+        function execPostRequest($url, $data)
+        {
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json',
+                    'Content-Length: ' . strlen($data))
+            );
+            curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+            //execute post
+            $result = curl_exec($ch);
+            //close connection
+            curl_close($ch);
+            return $result;
+        }
+
+
+        $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
+
+
+        $partnerCode = 'MOMOBKUN20180529';
+        $accessKey = 'klm05TvNBzhg7h7j';
+        $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
+        $orderInfo = "Thanh toán qua QR MoMo";
+        $amount = $ticket->totalPrice;
+        $orderId = $ticket->code;
+        $redirectUrl = "http://127.0.0.1:8000/admin/buyTicket/Success";
+        $ipnUrl = "http://127.0.0.1:8000/admin/buyTicket/Success";
+        $extraData = "";
+        $autoCapture =FALSE;
+
+            $requestId = time() . "";
+            $requestType = "captureWallet";
+            // $extraData = ($_POST["extraData"] ? $_POST["extraData"] : "");
+            //before sign HMAC SHA256 signature
+            $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId  . "&requestType=" . $requestType;
+            $signature = hash_hmac("sha256", $rawHash, $secretKey);
+            $data = array('partnerCode' => $partnerCode,
+                'partnerName' => "Test",
+                "storeId" => "MomoTestStore",
+                'requestId' => $requestId,
+                'amount' => $amount,
+                'orderId' => $orderId,
+                'orderInfo' => $orderInfo,
+                'redirectUrl' => $redirectUrl,
+                'ipnUrl' => $ipnUrl,
+                'lang' => 'vi',
+                'extraData' => $extraData,
+                'requestType' => $requestType,
+                'signature' => $signature);
+            $result = execPostRequest($endpoint, json_encode($data));
+            $jsonResult = json_decode($result, true);  // decode json
+            //Just a example, please check more in there
+            return redirect($jsonResult['payUrl']);
+            sleep(10);
     }
 
     public function handleResult(Request $request)
     {
-//        array:12 [▼
-//              "vnp_Amount" => "7500000"
-//              "vnp_BankCode" => "NCB"
-//              "vnp_BankTranNo" => "VNP14038134"
-//              "vnp_CardType" => "ATM"
-//              "vnp_OrderInfo" => "Thanh toan GD:21355094087"
-//              "vnp_PayDate" => "20230613213610"
-//              "vnp_ResponseCode" => "00"
-//              "vnp_TmnCode" => "6JQZ09G6"
-//              "vnp_TransactionNo" => "14038134"
-//              "vnp_TransactionStatus" => "00"
-//              "vnp_TxnRef" => "21355094087"
-//              "vnp_SecureHash" => "b1a4601eb9be6f7ed795efc2e86e24f036af8b4cf3f9dbb5df6e0caf3d382181d51e1a9ebda0fb8d19ed6c89eba78f8b95ba55af25d0ec18b1b16ceff1100de0"
-//         ]
-
-        if ($request->vnp_BankCode === 'MONEY') {
-            $request->vnp_Amount = $request->total;
-            $request->vnp_ResponseCode = '00';
-            $tickeById = Ticket::find($request->ticket_id);
-            $request->vnp_TxnRef = $tickeById->code;
+        if ($request->type == 'ticket') {
+            return redirect('admin/buyTicket')->with('success', 'Thanh toán thành công!');
+        } else {
+            return redirect('admin/buyCombo')->with('success', 'Thanh toán thành công!');
         }
-
-
-        $ticket = Ticket::where('code', $request->vnp_TxnRef)->get()->first();
-        switch ($request->vnp_ResponseCode) {
-            case '00':
-                if ($request->userCode) {
-                    $user = User::where('code', $request->userCode)->first();
-                    $money_payment = 0 ;
-                    foreach($user['ticket'] as $ticket)
-                    {
-                        $money_payment += $ticket['totalPrice'];
-                    }
-                    if($money_payment < 4000000){
-                        $point = ($ticket['totalPrice'])*5/100;
-                    } else {
-                        $point = ($ticket['totalPrice'])*10/100;
-                    }
-                    if ($request->point == null) {
-                        $user->point += $point;
-                    } else {
-                        $user->point -= $request->point;
-                    }
-                    $user->save();
-                }
-                $ticket->hasPaid = true;
-                $ticket->save();
-
-                if ($request->type == 'ticket') {
-                    return redirect('admin/buyTicket')->with('success', 'thanh toán thành công!');
-                } else {
-                    return redirect('admin/buyCombo')->with('success', 'thanh toán thành công!');
-                }
-            default:
-                Ticket::where('code', $request->vnp_TxnRef)->delete();
-                return redirect('admin/buyTicket')->with('fail', 'thanh toán thất bại!');
-        }
+        return redirect('admin/buyTicket')->with('fail', 'Thanh toán thất bại!');
     }
 
-    public function ticketPayment(Request $request) {
-        $ticket = Ticket::find($request->ticket_id);
-        $ticket->holdState = false;
-        $ticket->totalPrice = $request->totalPrice;
-        $user = User::where('code', $request->userCode)->get()->first();
-        if ($user) {
-            $ticket->user_id = $user->id;
-        } else {
-            $ticket->user_id = Auth::user()->id;
-        }
-        $ticket->save();
-
-        return response('', 200);
+    public function delete($id)
+    {
+        $ticket = Ticket::find($id);
+        $ticket->delete();
+        return redirect('admin/buyTicket')->with('fail', 'Thanh toán thất bại!');
     }
 
     public function scanTicket() {
@@ -310,59 +316,13 @@ class StaffController extends Controller
     public function buyCombo(Request $request) {
         $combos = Combo::where('status', 1)->get();
         $foods = Food::where('status', 1)->get();
-        return view('admin.buyCombo.buyCombo', [
+        return view('admin.web.buyCombo', [
             'combos' => $combos,
             'foods' => $foods,
         ]);
     }
 
-    public function createTicketCombo(Request $request) {
-        $ticket = new Ticket([
-            'schedule_id' => null,
-            'user_id' => null,
-            'holdState' => false,
-            'status' => false,
-            'hasPaid' => false,
-            'code' => rand(10000000, 9999999999)
-        ]);
-        $ticket->save();
-        if ($request->ticketCombos) {
-            foreach ($request->ticketCombos as $ticketCombo) {
-                $combo = Combo::find($ticketCombo[0]);
-                $details = '';
-                foreach ($combo->foods as $food) {
-                    $details .= $food->pivot->quantity . ' ' . $food->name . ' + ';
-                }
-                $details = substr($details, 0, -3);
-                $newTkCb = new TicketCombo([
-                    'comboName' => $combo->name,
-                    'comboPrice' => $combo->price,
-                    'comboDetails' => $details,
-                    'quantity' => $ticketCombo[1],
-                    'ticket_id' => $ticket->id
-                ]);
 
-                $newTkCb->save();
-                unset($newTkCb);
-            }
-        }
-        if ($request->ticketFoods) {
-            foreach ($request->ticketFoods as $ticketFood) {
-                $food = Food::find($ticketFood[0]);
-                $newTkF = new TicketFood([
-                    'foodName' => $food->name,
-                    'foodPrice' => $food->price,
-                    'quantity' => $ticketFood[1],
-                    'ticket_id' => $ticket->id,
-                ]);
-
-                $newTkF->save();
-                unset($newTkF);
-            }
-        }
-
-        return response()->json(['ticket_id' => $ticket->id]);
-    }
 
     public function scanCombo() {
         return view('admin.scanCombo.scanCombo');

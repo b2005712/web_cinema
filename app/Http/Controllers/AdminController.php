@@ -9,7 +9,9 @@ use App\Models\TicketSeat;
 use App\Models\Info;
 use App\Models\User;
 use App\Models\Movie;
+use App\Models\StaffTheater;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -21,70 +23,110 @@ class AdminController extends Controller
         view()->share('info', $info);
     }
 
+    public function login(Request $request){
+        $request->validate(
+            [
+                'username' => 'required',
+                'password' => 'required'
+            ],
+            [
+                'username.required' => 'Vui lòng nhập email quản lý hoặc nhân viên',
+                'password.required' => 'Vui lòng nhập mật khẩu!'
+            ]
+        );
+        $email = Auth::attempt(['email' => $request['username'], 'password' => $request['password']]);
+        $phone = Auth::attempt(['phone' => $request['username'], 'password' => $request['password']]);
+        
+        if ($email || $phone) {
+            if(Auth::user()->role =='admin') {
+                return redirect('/admin')->with('success','Đăng nhập tài khoản admin thành công');
+            } elseif(Auth::user()->role =='staff') {
+                return redirect('/admin/staff')->with('success','Chào mừng bạn '.Auth::user()->fullname.' !');
+            }
+        } else {
+            return redirect('/admin')->with('warning','Sai tài khoản hoặc mật khẩu');
+        }
+    }
+
+    public function logout(){
+        Auth::logout();
+        return redirect('/admin')->with('success','Đăng xuất thành công');
+    }
+
     public function home()
     {
-        $info = Info::find(1);
-        $now = Carbon::now('Asia/Ho_Chi_Minh')->endOfDay();
-        $year = Carbon::now('Asia/Ho_Chi_Minh')->subDays(365)->startOfYear()->toDateString();
-        $start_of_month = Carbon::now('Asia/Ho_Chi_Minh')->startOfMonth();
-        $total_year = Ticket::whereBetween('created_at', [$year, $now])->orderBy('created_at', 'ASC')->get();
-        $theaters = Theater::orderBy('id', 'ASC')->get();
-        $ticket = Ticket::whereDate('created_at', Carbon::today())->get();
-        $ticket_seat = TicketSeat::get()->whereBetween('created_at', [$year, $now])->count();
-        $user = User::where('role', 'user')->get();
-        $movies = Movie::all();
-        foreach ($theaters as $theater) {
-            $total_seat = 0;
-            $total_price = 0;
-            foreach ($theater['rooms'] as $theater_room) {
-                foreach ($theater_room['schedules'] as $theater_schedule) {
-                    foreach ($theater_schedule['Ticket'] as $theater_ticket) {
-                        $total_seat += $theater_ticket['ticketseats']->count();
-                        $total_price += $theater_ticket['totalPrice'];
+        if (Auth::user()) {
+            if (Auth::user()->role == 'admin') {
+                $info = Info::find(1);
+                $now = Carbon::now('Asia/Ho_Chi_Minh')->endOfDay();
+                $year = Carbon::now('Asia/Ho_Chi_Minh')->subDays(365)->startOfYear()->toDateString();
+                $start_of_month = Carbon::now('Asia/Ho_Chi_Minh')->startOfMonth();
+                $total_year = Ticket::whereBetween('created_at', [$year, $now])->orderBy('created_at', 'ASC')->get();
+                $theaters = Theater::orderBy('id', 'ASC')->get();
+                $ticket = Ticket::whereDate('created_at', Carbon::today())->get();
+                $ticket_seat = TicketSeat::get()->whereBetween('created_at', [$year, $now])->count();
+                $user = User::where('role', 'user')->get();
+                $movies = Movie::all();
+                foreach ($theaters as $theater) {
+                    $total_seat = 0;
+                    $total_price = 0;
+                    foreach ($theater['rooms'] as $theater_room) {
+                        foreach ($theater_room['schedules'] as $theater_schedule) {
+                            foreach ($theater_schedule['Ticket'] as $theater_ticket) {
+                                $total_seat += $theater_ticket['ticketseats']->count();
+                                $total_price += $theater_ticket['totalPrice'];
+                            }
+                        }
                     }
+                    $theater->setAttribute('totalPrice', $total_price);
+                    $theater->setAttribute('ticketseats', $total_seat);
                 }
-            }
-            $theater->setAttribute('totalPrice', $total_price);
-            $theater->setAttribute('ticketseats', $total_seat);
-        }
 
-        foreach ($movies as $movie) {
-            $total_seat = 0;
-            $total_price = 0;
-            foreach ($movie['schedules'] as $movie_schedule) {
-                foreach ($movie_schedule['Ticket'] as $movie_ticket) {
-                    $total_seat += $movie_ticket['ticketseats']->count();
-                    $total_price += $movie_ticket['totalPrice'];
+                foreach ($movies as $movie) {
+                    $total_seat = 0;
+                    $total_price = 0;
+                    foreach ($movie['schedules'] as $movie_schedule) {
+                        foreach ($movie_schedule['Ticket'] as $movie_ticket) {
+                            $total_seat += $movie_ticket['ticketseats']->count();
+                            $total_price += $movie_ticket['totalPrice'];
+                        }
+                    }
+                    $movie->setAttribute('totalPrice', $total_price);
+                    $movie->setAttribute('ticketseats', $total_seat);
                 }
+
+                $movies = $movies->sortByDesc('totalPrice');
+
+                $sum = 0;
+                $sum_today = 0;
+                //total of month
+                foreach ($total_year as $value) {
+                    $sum += $value['totalPrice'];
+                }
+                //total today
+                foreach ($ticket as $today) {
+                    $sum_today += $today['totalPrice'];
+                }
+                return view('admin.web.home', [
+                    'user' => $user,
+                    'ticket' => $ticket,
+                    'sum' => $sum,
+                    'sum_today' => $sum_today,
+                    'now' => $now,
+                    'start_of_month' => $start_of_month,
+                    'ticket_seat' => $ticket_seat,
+                    'year' => $year,
+                    'theaters' => $theaters,
+                    'movies' => $movies
+                ]);
             }
-            $movie->setAttribute('totalPrice', $total_price);
-            $movie->setAttribute('ticketseats', $total_seat);
+            else {
+                return view('admin.web.login');
+            }
+            }
+        else {
+            return view('admin.web.login');
         }
-
-        $movies = $movies->sortByDesc('totalPrice');
-
-        $sum = 0;
-        $sum_today = 0;
-        //total of month
-        foreach ($total_year as $value) {
-            $sum += $value['totalPrice'];
-        }
-        //total today
-        foreach ($ticket as $today) {
-            $sum_today += $today['totalPrice'];
-        }
-        return view('admin.web.home', [
-            'user' => $user,
-            'ticket' => $ticket,
-            'sum' => $sum,
-            'sum_today' => $sum_today,
-            'now' => $now,
-            'start_of_month' => $start_of_month,
-            'ticket_seat' => $ticket_seat,
-            'year' => $year,
-            'theaters' => $theaters,
-            'movies' => $movies
-        ]);
     }
 
     public function filter_by_date(Request $request)
@@ -169,9 +211,9 @@ class AdminController extends Controller
 
     public function staff()
     {
-        $staff = User::where('role', 'staff')->orderBy('id', 'DESC')->paginate(5);
+        $staff = User::where('role', 'staff')->orderBy('id', 'DESC')->paginate(10);
         $theaters = Theater::all();
-
+        
         return view('admin.web.staff', [
             'staff' => $staff,
             'theaters' => $theaters
@@ -204,7 +246,20 @@ class AdminController extends Controller
         ]);
         //        dd($staff);
         $staff->save();
-        $staff->theater_id = $request->theater_id;
+        $staff_theater = new StaffTheater([
+            'user_id' => $staff->id,
+            'theater_id' => $request->theater_id 
+        ]);
+        $staff_theater->save();
         return redirect('/admin/staff')->with('success', 'Tạo tài khoản thành công!');
+    }
+
+    public function delete($id)
+    {
+        $user = User::find($id);
+        if ($user['status'] == 0) {
+            User::destroy($id);
+            return response()->json(['success' => 'Xóa thành công!']);
+        }
     }
 }

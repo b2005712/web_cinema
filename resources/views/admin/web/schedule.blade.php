@@ -262,7 +262,7 @@
         </div>
     @endforeach
 @endsection
-@section('scripts')
+@section('js')
 <script>
     $(document).ready(function() {
         flatpickr($("#date"), {

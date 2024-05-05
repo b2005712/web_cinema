@@ -47,4 +47,9 @@ class Theater extends Model
             ->join('tickets', 'tickets.schedule_id', '=', 'schedules.id')
             ->where('rooms.theater_id', $this->id);
     }
+
+    public function StaffTheater()
+    {
+        return $this->hasOne(StaffTheater::class, 'theater_id');
+    }
 }
