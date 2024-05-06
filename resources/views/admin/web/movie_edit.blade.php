@@ -413,7 +413,7 @@
     </div>
 </div>
 @endsection
-@section('scripts')
+@section('js')
     <script>
         flatpickr(  $("#endDate"),{
             dateFormat: "Y-m-d ",

@@ -178,5 +178,5 @@
     </div>
 </div>
 @endsection
-@section('scripts')
+@section('js')
 @endsection

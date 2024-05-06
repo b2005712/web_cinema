@@ -17,10 +17,12 @@ class TicketController extends Controller
     public function ticket()
     {
         $tickets = Ticket::where('status', false)->get();
-        foreach ($tickets as $ticket) {
-            if ($ticket->schedule->endTime >= date('H:i:s')) {
-                $ticket->status = true;
-                $ticket->save();
+        foreach ($tickets as $value) {
+            if(isset($value->schedule)){
+                if ($value->schedule->endTime >= date('H:i:s')) {
+                    $value->status = true;
+                    $value->save();
+                }
             }
         }
         $ticket = Ticket::orderBy('id', 'DESC')->Paginate(10);

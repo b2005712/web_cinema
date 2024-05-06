@@ -262,4 +262,8 @@ class AdminController extends Controller
             return response()->json(['success' => 'Xóa thành công!']);
         }
     }
+
+    public function scanTicket(){
+        return view('admin.web.scanTicket');
+    }
 }

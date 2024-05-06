@@ -141,32 +141,26 @@
     .right {
         border-left: 1px dashed #404040;
         position: relative;
+        width: 250px;
     }
 
     .right .right-info-container {
-        height: 370px;
-        width: 145px;
-        padding: 10px 10px 10px 35px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
+            height: 250px;
+            width: 145px;
+            padding: 10px 10px 10px 35px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
 
-    .right .show-name h6 {
-        font-size: 18px;
-    }
+        .right .show-name h6 {
+            font-size: 18px;
+        }
 
-    .barcode {
-        height: 100px;
-    }
-
-    .barcode img {
-        width: 150px;
-        height: 40px;
-        margin-bottom: 10px;
-        transform: rotate(90deg);
-    }
+        .barcode {
+            height: 100px;
+        }
 
     .right .ticket-number {
         font-family: "Staatliches", cursive;
@@ -249,15 +243,17 @@
                 <div class="right-info-container">
                     <div class="barcode">
                         @php
-                            $generatorPNG = new Picqer\Barcode\BarcodeGeneratorPNG();
+                            $base64 = new SimpleSoftwareIO\QrCode\Facades\QrCode();
+                            $base64 = QrCode::size(128)->generate($ticket->code);
                         @endphp
-                        <div class="text-center">
-                            <img src="data:image/png;base64,{!! base64_encode($generatorPNG->getBarcode($ticket->code,$generatorPNG::TYPE_CODE_128)) !!}" />
+                        <div class=" text-center">
+                            {{$base64}}
                         </div>
+                        <p class="ticket-number" >
+                            #{{ $ticket->code }}
+                        </p>
                     </div>
-                    <p class="ticket-number" >
-                        #{{ $ticket->code }}
-                    </p>
+                    
                 </div>
             </div>
         </div>

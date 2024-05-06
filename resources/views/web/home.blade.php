@@ -10,9 +10,16 @@
         </div>
         <div class="carousel-inner">
             @foreach($banners as $banner)
-                <div class="carousel-item active">
-                    <img src="\images\banners\{{$banner->image}}" class="d-block w-100" style="max-height: 550px; object-fit: contain; object-position: 50% 100%" alt="...">
-                </div>
+                @if ($loop->first)
+                    <div class="carousel-item active">
+                        <img src="\images\banners\{{$banner->image}}" class="d-block w-100" style="max-height: 550px; object-fit: contain; object-position: 50% 100%" alt="...">
+                    </div>
+                @else
+                    <div class="carousel-item">
+                        <img src="\images\banners\{{$banner->image}}" class="d-block w-100" style="max-height: 550px; object-fit: contain; object-position: 50% 100%" alt="...">
+                    </div>
+                @endif
+                
             @endforeach
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">

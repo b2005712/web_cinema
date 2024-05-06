@@ -30,6 +30,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/login', [AdminController::class, 'login']);
     Route::get('/logout', [AdminController::class, 'logout']);
     Route::get('/paymentQR/{ticket_id}', [StaffController::class, 'paymentQR']);
+    Route::get('/scanTicket', [AdminController::class, 'scanTicket']);
     Route::post('/ticketCreate', [StaffController::class, 'createTicket']);
     Route::get('/filter-by-date', [AdminController::class, 'filter_by_date']);
     //TODO Movie Genres
@@ -134,6 +135,8 @@ Route::prefix('admin')->group(function () {
     Route::prefix('staff')->group(function () {
         Route::get('/', [AdminController::class, 'staff']);
         Route::post('/create', [AdminController::class, 'postCreate']);
+        Route::post('/checkTicket', [StaffController::class, 'checkTicket']);
+        Route::post('/confirmTicket', [StaffController::class, 'confirmTicket']);
         Route::delete('/delete/{id}', [AdminController::class, 'delete']);
     });
 
@@ -141,7 +144,6 @@ Route::prefix('admin')->group(function () {
         Route::post('/handleResult', [StaffController::class, 'handleResult']);
         Route::post('/checkUser', [StaffController::class, 'checkUser']);
         Route::delete('/delete/{id}', [StaffController::class, 'delete']);
-        Route::post('/scanBC', [StaffController::class, 'scanBarcode']);
         Route::get('/Success', [StaffController::class, 'Hadpaid']);
         Route::get('/{schedule_id}', [StaffController::class, 'ticket']);
         Route::get('/', [StaffController::class, 'buyTicket']);

@@ -60,14 +60,14 @@
         <div id="phimdangchieu" class="row g-4 mt-2 row-cols-1 row-cols-md-2 collapse show" data-bs-parent="#Movies">
             <div class="product w-100">
                 <div class="row d-flex justify-content-center">
-                    <div class="product-list col-10">
+                    <div class="product-list ">
                         <div class="row">
                             @foreach ($movies as $movie)
                                 @if ($movie->releaseDate <= date('Y-m-d') && $movie->endDate >= date('Y-m-d'))
-                                <article class="col-md-3 col-sm-4 col-xs-6 thumb grid-item post-38424">
+                                <article class="col-md-3 col-sm-4 col-xs-6 thumb grid-item post-38424 mt-3">
                                     <div class="item">
                                        <a class="thumb" href="/movie/{{ $movie->id }}" title="{!! $movie['name'] !!}">
-                                        <figure><img class="lazy img-responsive" src="/images/movies/{!! $movie['image'] !!}" alt="" title="{!! $movie['name'] !!}" style="height: 350px"></figure>
+                                        <figure><img class="lazy img-responsive" src="/images/movies/{!! $movie['image'] !!}" alt="" title="{!! $movie['name'] !!}" style="height: 380px"></figure>
                                         <span class="status
                                         @if($movie->rating->name == 'C18') bg-danger
                                         @elseif($movie->rating->name == 'C16') bg-warning
@@ -99,7 +99,7 @@
                                             </div>
                                         </div>
                                         <ul>
-                                            <li class="booking mt-3" style="float: right ">
+                                            <li class="booking mt-2" style="float: right ">
                                                 <button class="btn btn-booking"><i class="fa-solid fa-receipt"></i> Đặt vé</button>
                                             </li>
                                         </ul>
@@ -109,9 +109,6 @@
                                 @endif
                             @endforeach
                         </div>
-                    </div>
-                    <div class="product-rating col-2">
-
                     </div>
                 </div>
 
@@ -121,14 +118,14 @@
         <div id="phimsapchieu" class="row g-4 mt-2 row-cols-1 row-cols-md-2 collapse" data-bs-parent="#Movies">
             <div class="product w-100">
                 <div class="row d-flex justify-content-center">
-                    <div class="product-list col-10">
+                    <div class="product-list">
                         <div class="row">
                             @foreach ($movies as $movie)
                                 @if ($movie->releaseDate > date('Y-m-d'))
                                 <article class="col-md-3 col-sm-4 col-xs-6 thumb grid-item post-38424">
                                     <div class="item">
                                        <a class="thumb" href="/movie/{{ $movie->id }}" title="{!! $movie['name'] !!}">
-                                        <figure><img class="lazy img-responsive" src="/images/movies/{!! $movie['image'] !!}" alt="" title="{!! $movie['name'] !!}" style="height: 350px"></figure>
+                                        <figure><img class="lazy img-responsive" src="/images/movies/{!! $movie['image'] !!}" alt="" title="{!! $movie['name'] !!}" style="height: 380px"></figure>
                                         <span class="status
                                         @if($movie->rating->name == 'C18') bg-danger
                                         @elseif($movie->rating->name == 'C16') bg-warning
@@ -160,7 +157,7 @@
                                             </div>
                                         </div>
                                         <ul>
-                                            <li class="booking mt-3" style="float: right ">
+                                            <li class="booking mt-2" style="float: right ">
                                                 <button class="btn btn-booking"><i class="fa-solid fa-receipt"></i> Đặt vé</button>
                                             </li>
                                         </ul>
@@ -170,9 +167,6 @@
                                 @endif
                             @endforeach
                         </div>
-                    </div>
-                    <div class="product-rating col-2">
-
                     </div>
                 </div>
             </div>

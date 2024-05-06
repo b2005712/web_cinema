@@ -100,7 +100,7 @@
     @include('admin.web.room_create')
 @endforeach
 @endsection
-@section('scripts')
+@section('js')
     <script>
         function theaterstatus(theater_id, active) {
             if (active === 1) {

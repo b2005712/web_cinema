@@ -289,6 +289,31 @@
                                         <div class="row row-cols-1" data-bs-parent="#mainContent">
                                             <div class="col">
                                                 <div class="row">
+                                                    <style>
+                                                        canvas.drawingBuffer{
+                                                            display: none;
+                                                        }
+                                                    </style>
+                                                    <div class="modal fade" id="barcodeModal" tabindex="-1" aria-labelledby="barcodeModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="barcodeModalLabel">Quét Mã Vạch</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div id="barcode-scanner-container"></div>
+                                                                    <div class="mt-3">
+                                                                        <label for="imageInput" class="form-label">Chọn Hình Ảnh</label>
+                                                                        <input type="file" class="form-control" id="imageInput">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#barcodeModal">
+                                                        Mở Quét Mã Vạch
+                                                    </button>
                                                     <div class="form-group col-10">
                                                         <label for="userId" class="form-control-label">Mã khách hàng</label>
                                                         <input id="userId" class="form-control" name="userCode" type="number" value="">
@@ -366,6 +391,7 @@
 
 @endsection
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/quagga/dist/quagga.min.js"></script>
 <script>
     $(document).ready(function() {
         $i = 0;
@@ -501,6 +527,73 @@
         }
 
 
+    });
+
+    //Quét mã
+    Quagga.init({
+        inputStream: {
+            name: "Live",
+            type: "LiveStream",
+            target: document.querySelector('#barcode-scanner-container'), // Hiển thị camera trong div này
+            constraints: {
+                facingMode: "environment" // Sử dụng camera phía sau (đối với thiết bị có nhiều camera)
+            },
+        },
+        decoder: {
+            readers: ["code_128_reader"] // Đọc mã vạch EAN
+        }
+    }, function(err) {
+        if (err) {
+            console.error('Quagga init error:', err);
+            return;
+        }
+        console.log('Quagga initialized');
+        Quagga.start(); // Bắt đầu quét mã vạch
+    });
+
+    // Xử lý kết quả khi quét được mã vạch
+    Quagga.onDetected(function(result) {
+        console.log('Phát hiện mã vạch:', result.codeResult.code);
+        // Xử lý kết quả ở đây, ví dụ: đóng modal và hiển thị mã vạch
+        $('#barcodeModal').modal('hide');
+        $('#userId').val(result.codeResult.code);
+        Swal.fire({
+            title: 'Quét mã vạch thành công',
+            html: 'Mã khách hàng: <span id="customerCode">'+ result.codeResult.code+'</span>',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+        })
+        UserID();
+    });
+
+    // Xử lý sự kiện khi người dùng chọn hình ảnh
+    document.getElementById('imageInput').addEventListener('change', function(e) {
+        var file = e.target.files[0];
+        if (!file) return;
+
+        // Đọc file hình ảnh và quét mã vạch
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var img = new Image();
+            img.onload = function() {
+                Quagga.decodeSingle({
+                    src: img.src,
+                    numOfWorkers: 0,  // Số lượng worker sử dụng để giảm tải cho máy tính
+                    decoder: {
+                        readers: ["code_128_reader"]
+                    },
+                    locate: true // Tìm kiếm mã vạch trên hình ảnh
+                }, function(result) {
+                    if (result && result.codeResult) {
+                        console.log('Detected barcode from image:', result.codeResult.code);
+                    } else {
+                        console.log('No barcode detected from image');
+                    }
+                });
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
     });
 
 

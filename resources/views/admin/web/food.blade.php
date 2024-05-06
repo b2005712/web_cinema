@@ -170,7 +170,7 @@
     </div>
 </div>
 @endsection
-@section('scripts')
+@section('js')
     <script>
         $(document).ready(function () {
             $.ajaxSetup({

@@ -212,7 +212,7 @@
     </form>
     </div>
 @endsection
-@section('scripts')
+@section('js')
     <script>
         $(document).ready(function () {
             deleteCombo = (id) => {

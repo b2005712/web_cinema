@@ -322,53 +322,13 @@ class StaffController extends Controller
         ]);
     }
 
-
-
-    public function scanCombo() {
-        return view('admin.scanCombo.scanCombo');
-    }
-
-    public function handleScanCombo(Request $request) {
+    public function checkTicket(Request $request){
         $ticket = Ticket::where('code', $request->code)->first();
-        $message = 'vé hợp lệ';
-        $check = true;
-
-        if (!$ticket) {
-            $message = 'không tìm thấy vé';
-            $check = false;
-        } else {
-            if ($ticket->receivedCombo) {
-                $message = 'Đã lấy đồ ăn';
-                $check = false;
-            } else {
-                $ticket->receivedCombo = true;
-            }
-        }
-        $comboHtml = '<ul>';
-        foreach ($ticket->ticketCombos as $combo) {
-            $comboHtml .= '<li>'.$combo->quantity.' X '.$combo->comboName.'<br>('.$combo->comboDetails.')</li>';
-        }
-
-        foreach ($ticket->ticketFoods as $food) {
-            $comboHtml .= '<li>'.$food->quantity.' X '.$food->foodName.'</li>';
-        }
-        $comboHtml .= '</ul>';
-
-        $ticket->save();
-
-        return response()->json([
-            'comboHtml' => $comboHtml,
-            'message' => $message,
-            'check' => $check,
-        ]);
+        return redirect('admin/scanTicket')->with('ticket', $ticket);
     }
 
-    public function ticketComboPayment(Request $request) {
-        $ticket = Ticket::find($request->ticket_id);
-        $ticket->holdState = false;
-        $ticket->totalPrice = $request->totalPrice;
-        $ticket->save();
-
-        return response('', 200);
+    public function confirmTicket(Request $request){
+        $ticket = Ticket::where('code', $request->code)->update(['status' => true]);;
+        return redirect('admin/buyTicket')->with('success', 'Xác nhận vé thành công!');
     }
 }

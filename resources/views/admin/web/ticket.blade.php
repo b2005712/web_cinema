@@ -89,7 +89,7 @@
                                             <span class="badge badge-sm bg-gradient-success">Chờ</span>
                                         @endif
                                     @else
-                                        <span class=""><i class="fa-regular fa-ban"></i></span>
+                                        <span class="badge badge-sm bg-gradient-secondary">Đã xong</span>
                                     @endif
                                 </td>
                             </tr>
@@ -107,10 +107,11 @@
                                                             <div class="flex-column d-flex justify-content-center text-center">
                                                                 <div>
                                                                     @php
-                                                                        $generatorPNG = new Picqer\Barcode\BarcodeGeneratorPNG();
+                                                                        $base64 = new SimpleSoftwareIO\QrCode\Facades\QrCode();
+                                                                        $base64 = QrCode::size(128)->generate($value->code);
                                                                     @endphp
                                                                     <div class="text-center">
-                                                                        <img src="data:image/png;base64,{!! base64_encode($generatorPNG->getBarcode($value->code,$generatorPNG::TYPE_CODE_128)) !!}" />
+                                                                        {{$base64}}
                                                                     </div>
                                                                 </div>
                                                                 <div class="mt-2">
