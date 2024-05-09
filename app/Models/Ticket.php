@@ -17,6 +17,7 @@ class Ticket extends Model
         'hasPaid',
         'payment',
         'totalPrice',
+        'status',
         'created_at'
     ];
 

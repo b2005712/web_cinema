@@ -168,5 +168,26 @@
         reader.readAsDataURL(file);
     });
 
+    @if(session('success'))
+        Swal.fire({
+            title: '{{session('success')}}',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+        })
+        @endif
+    @if(session('fail'))
+        Swal.fire({
+            title: '{{session('fail')}}',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        })
+    @endif
+    @if(session('warning'))
+        Swal.fire({
+            title: '{{session('warning')}}',
+            icon: 'warning',
+            confirmButtonText: 'Ok'
+        })
+    @endif
 </script>
 @endsection

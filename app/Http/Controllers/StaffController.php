@@ -252,67 +252,6 @@ class StaffController extends Controller
         return view('admin.scanTicket.scanTicket');
     }
 
-    public function handleScanTicket(Request $request) {
-        $message = 'vé hợp lệ';
-        $check = true;
-        $seatsList = '';
-        $ticket = Ticket::where('code',  $request->code)->first();
-
-        if ($ticket) {
-            if ($ticket->schedule->date == date('Y-m-d')) {
-                if (strtotime('- 10 minutes', strtotime($ticket->schedule->startTime)) > strtotime(date('H:i:s'))) {
-                    $message = 'Chưa đến giờ chiếu phim';
-                    $check = false;
-                    $ticket->status = true;
-                } else {
-                    if (strtotime($ticket->schedule->endTime) > strtotime(date('H:i:s'))) {
-                        if ($ticket->status) {
-                            $ticket->status = false;
-                            $check = true;
-                            $message = 'vé hợp lệ';
-                        } else {
-                            $message = 'vé không hợp lệ';
-                            $check = false;
-                        }
-                    } else {
-                        $message = 'suất chiếu đã kết thúc';
-                        $check = false;
-                        $ticket->status = false;
-                    }
-                }
-
-            } else if ($ticket->schedule->date > date('Y-m-d')) {
-                    $message = 'Chưa đến ngày chiếu phim';
-                    $check = false;
-                    $ticket->status = true;
-            } else  {
-                $message = 'suất chiếu đã kết thúc';
-                $check = false;
-                $ticket->status = false;
-            }
-
-            $ticket->save();
-
-            foreach ($ticket->ticketSeats as $seats) {
-                $seatsList .= $seats->row.$seats->col.',';
-            }
-        } else {
-            $message = 'không tìm thấy vé';
-            $check = false;
-        }
-
-        return response()->json([
-            'theater' => $ticket->schedule->room->theater->name,
-            'room' => $ticket->schedule->room->name,
-            'movie' => $ticket->schedule->movie->name,
-            'seats' => $seatsList,
-            'date' => $ticket->schedule->date,
-            'startTime' => $ticket->schedule->startTime,
-            'message' => $message,
-            'check' => $check,
-        ]);
-    }
-
     public function buyCombo(Request $request) {
         $combos = Combo::where('status', 1)->get();
         $foods = Food::where('status', 1)->get();
@@ -328,7 +267,18 @@ class StaffController extends Controller
     }
 
     public function confirmTicket(Request $request){
-        $ticket = Ticket::where('code', $request->code)->update(['status' => true]);;
-        return redirect('admin/buyTicket')->with('success', 'Xác nhận vé thành công!');
+        $ticket = Ticket::where('code', $request->code)->first();
+        if(!$ticket){
+            return redirect('admin/scanTicket')->with('fail', 'Vé lỗi!')->with('ticket', $ticket);
+        }
+        elseif($ticket->status == '1'){
+            return redirect('admin/scanTicket')->with('warning', 'Vé đã được sử dụng!')->with('ticket', $ticket);
+        }
+        else{
+            $ticket->status = '1';
+            $ticket->save();
+            return redirect('admin/buyTicket')->with('success', 'Xác nhận vé thành công!');
+        }
     }
+    
 }

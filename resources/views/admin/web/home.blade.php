@@ -521,7 +521,7 @@
                             }],
                             xkey: 'date',
                             ykeys: ['seat_count'],
-                            labels: ['seat_count']
+                            labels: ['Số vé']
                         });
                         if (data['success']) {
                             chart.setData(data.chart_data);
@@ -543,7 +543,7 @@
                             }],
                             xkey: 'date',
                             ykeys: ['1', '2', '3'],
-                            labels: ['Rạp Cao Lỗ', 'Rạp Hồ Gươm', 'Rạp VinCom Đà Nẵng']
+                            labels: ['Rạp Xuân Khánh', 'Rạp Hùng Vương', 'Rạp Bình Thạnh']
                         });
                         if (data['success']) {
                             chart.setData(data.chart_data);

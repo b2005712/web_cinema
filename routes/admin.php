@@ -33,6 +33,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/scanTicket', [AdminController::class, 'scanTicket']);
     Route::post('/ticketCreate', [StaffController::class, 'createTicket']);
     Route::get('/filter-by-date', [AdminController::class, 'filter_by_date']);
+    Route::get('/statistical-filter', [AdminController::class, 'statistical_filter']);
+    Route::get('/statistical-sortby', [AdminController::class, 'statistical_sortby']);
     //TODO Movie Genres
     Route::prefix('movie_genres')->group(function () {
         Route::get('/', [MovieGenresController::class, 'movie_genres']);

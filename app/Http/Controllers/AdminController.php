@@ -175,6 +175,167 @@ class AdminController extends Controller
         ]);
     }
 
+    public function statistical_filter(Request $request)
+    {
+
+        $now = Carbon::now('Asia/Ho_Chi_Minh')->endOfDay();
+        $week = Carbon::now('Asia/Ho_Chi_Minh')->startOfWeek()->toDateString();
+        $this_month = Carbon::now('Asia/Ho_Chi_Minh')->startOfMonth()->toDateString();
+        $start_last_month = Carbon::now('Asia/Ho_Chi_Minh')->subMonth()->startOfMonth()->toDateString();
+        $end_last_month = Carbon::now('Asia/Ho_Chi_Minh')->subMonth()->endOfMonth()->toDateString();
+        $year = Carbon::now('Asia/Ho_Chi_Minh')->subDays(365)->startOfYear()->toDateString();
+
+        if ($request['statistical_value'] == 'week') {
+            $get = Ticket::whereBetween('created_at', [$week, $now])->orderBy('created_at', 'ASC')->get();
+            $value_first = $get->first();
+            $value_last = $get->last();
+            $date_current = date("d-m-Y", strtotime($value_first['created_at']));
+        }
+        if ($request['statistical_value'] == 'year') {
+            $get = Ticket::whereBetween('created_at', [$year, $now])->orderBy('created_at', 'ASC')->get();
+            $value_first = $get->first();
+            $value_last = $get->last();
+            $date_current = date("m-Y", strtotime($value_first['created_at']));
+        }
+        if ($request['statistical_value'] == 'this_month') {
+            $get = Ticket::whereBetween('created_at', [$this_month, $now])->orderBy('created_at', 'ASC')->get();
+            $value_first = $get->first();
+            $value_last = $get->last();
+            $date_current = date("d-m-Y", strtotime($value_first['created_at']));
+        }
+        if ($request['statistical_value'] == 'last_month') {
+            $get = Ticket::whereBetween('created_at', [$start_last_month, $end_last_month])->orderBy('created_at', 'ASC')->get();
+            $value_first = $get->first();
+            $value_last = $get->last();
+            $date_current = date("d-m-Y", strtotime($value_first['created_at']));
+        }
+        function date_statistical($option, $date)
+        {
+            if ($option == 'year') {
+                return date("m-Y", strtotime($date));
+            } else {
+                return date("d-m-Y", strtotime($date));
+            }
+        }
+        $total = 0;
+        $seat_count = 0;
+        $chart_data = [];
+
+        foreach ($get as $value) {
+            if ($date_current == date_statistical($request['statistical_value'], $value['created_at'])) {
+                $total += $value['totalPrice'];
+                $seat_count += $value['ticketSeats']->count();
+            } else {
+                $data = array(
+                    'date' =>  $date_current,
+                    'total' => $total,
+                    'seat_count' => $seat_count
+                );
+                $date_current = date_statistical($request['statistical_value'], $value['created_at']);
+                $total = $value['totalPrice'];
+                $seat_count = $value['ticketSeats']->count();
+                array_push($chart_data, $data);
+            }
+            if ($value_last->id == $value['id']) {
+                $data = array(
+                    'date' => date_statistical($request['statistical_value'], $value['created_at']),
+                    'total' => $total,
+                    'seat_count' => $seat_count
+                );
+                array_push($chart_data, $data);
+            }
+        }
+
+        return response()->json([
+            'success' => 'Thành công',
+            'get' => $get,
+            'chart_data' => $chart_data,
+        ]);
+    }
+
+    public function statistical_sortby(Request $request)
+    {
+        $now = Carbon::now('Asia/Ho_Chi_Minh')->endOfDay();
+        $year = Carbon::now('Asia/Ho_Chi_Minh')->subDays(365)->startOfYear()->toDateString();
+
+        $get = Ticket::whereBetween('created_at', [$year, $now])->orderBy('created_at', 'ASC')->get();
+        $value_first = $get->first();
+        $value_last = $get->last();
+        $date_current = date("m-Y", strtotime($value_first['created_at']));
+
+        $seat_count = 0;
+        $theaters = Theater::all();
+        foreach ($theaters as $theater) {
+            $total[$theater->id] = 0;
+        }
+        $chart_data = [];
+        if ($request['statistical_value'] == 'ticket') {
+            foreach ($get as $value) {
+                if ($date_current == date("m-Y", strtotime($value['created_at']))) {
+                    $seat_count += $value['ticketSeats']->count();
+                } else {
+                    $data = array(
+                        'date' =>  $date_current,
+                        'seat_count' => $seat_count
+                    );
+                    $date_current = date("m-Y", strtotime($value['created_at']));
+                    $seat_count = $value['ticketSeats']->count();
+                    array_push($chart_data, $data);
+                }
+                if ($value_last->id == $value['id']) {
+                    $data = array(
+                        'date' => date("m-Y", strtotime($value['created_at'])),
+                        'seat_count' => $seat_count
+                    );
+                    array_push($chart_data, $data);
+                }
+            }
+        }
+        if ($request['statistical_value'] == 'theater') {
+            foreach ($get as $value) {
+                if ($date_current == date("m-Y", strtotime($value['created_at']))) {
+                    if ($value->schedule_id != null) {
+                        $total[$value->schedule->room->theater_id] += $value['totalPrice'];
+                    }
+                } else {
+                    $data = array(
+                        'date' =>  $date_current,
+                    );
+                    foreach ($theaters as $theater) {
+
+                        $data[$theater->id] = $total[$theater->id];
+                        //                        dd($data);
+                    }
+                    $date_current = date("m-Y", strtotime($value['created_at']));
+                    foreach ($theaters as $theater) {
+                        if ($value->schedule_id != null && $value->schedule->room->theater_id == $theater->id) {
+                            $total[$theater->id] = $value['totalPrice'];
+                        } else {
+                            $total[$theater->id] = 0;
+                        }
+                    }
+                    array_push($chart_data, $data);
+                }
+                if ($value_last->id == $value['id']) {
+                    $data = array(
+                        'date' =>  $date_current,
+                    );
+                    foreach ($theaters as $theater) {
+                        $data[$theater->id] = $total[$theater->id];
+                        //                        dd($data);
+                    }
+                }
+            }
+        }
+        //        if($request['statistical_value'] == 'genre'){
+        //
+        //        }
+        return response()->json([
+            'success' => 'Thành công',
+            'chart_data' => $chart_data,
+        ]);
+    }
+
     public function info()
     {
         $info = Info::find(1);
