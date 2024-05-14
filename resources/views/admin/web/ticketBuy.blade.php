@@ -343,7 +343,7 @@
 
                                                     <div class="form-check mb-3">
                                                         <input id="bankCode4" class="btn-check" type="radio" name="bankCode" value="MONEY"
-                                                               aria-label="" checked>
+                                                               aria-label="">
                                                         <label for="bankCode4"
                                                                class="custom-control-label btn btn-outline-primary fw-semibold fs-4 w-100
                                                                text-start text-dark">
