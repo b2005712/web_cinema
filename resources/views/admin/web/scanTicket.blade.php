@@ -123,7 +123,8 @@
     scanner.addListener('scan', function (content) {
         console.log('Mã QR đã được quét: ' + content);
         // Ở đây bạn có thể thực hiện các hành động khác sau khi quét được mã QR
-        alert('Mã QR đã được quét: ' + content);
+        $('#userCode').val(content);
+        $("#checkTicket").submit();
     });
 
     // Xử lý khi không tìm thấy camera
